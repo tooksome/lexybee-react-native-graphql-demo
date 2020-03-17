@@ -53,18 +53,19 @@ const NewBee = () => {
   return (
     <View style={styles.container}>
       <Input
-        containerStyle   ={styles.lettersInput}
-        value            ={entry}
-        placeholder      ="New Letters; Main Letter First"
+        containerStyle   = {styles.lettersInput}
+        inputContainerStyle= {{ borderBottomColor:'transparent' }}
+        value            = {entry}
+        placeholder      = "New Letters; Main Letter First"
         autoCapitalize   = "none"
         autoCorrect      = {false}
         autoCompleteType = "off"
-        onChangeText     ={(text) => setEntry(Bee.normalize(text).toUpperCase())}
-        onSubmitEditing ={addBeePlz}
+        onChangeText     = {(text) => setEntry(Bee.normalize(text).toUpperCase())}
+        onSubmitEditing  = {addBeePlz}
       />
       <Button
-        title            =" New Bee"
-        icon             ={<Icon name="add-circle-outline" />}
+        title            =" New"
+        icon             ={<Icon name="add-circle-outline" color="#FFF" />}
         onPress          ={addBeePlz}
         style            ={styles.newBeeBtn}
       />
@@ -74,16 +75,21 @@ const NewBee = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    alignItems: 'center',
-    flexDirection:   'row',
+    width:            '100%',
+    alignItems:       'center',
+    padding:          8,
+    flexDirection:    'row',
+    backgroundColor:  '#FFF',
   },
   lettersInput: {
-    flex: 1,
+    flex:             1,
+    marginRight:      16,
+    backgroundColor:  '#F8F8F8',
   },
   newBeeBtn: {
-    flex: 10,
+    flex:             10,
+    borderRadius:     8,
   },
-})
+});
 
 export default NewBee

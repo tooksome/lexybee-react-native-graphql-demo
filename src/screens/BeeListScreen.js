@@ -22,9 +22,9 @@ const BeeListScreen = ({ navigation }) => {
       <NewBee />
       <FlatList
         style        ={styles.wordList}
-        keyExtractor ={(letters, idx) => (letters+idx)}
+        keyExtractor ={(letters, idx) => (letters + idx)}
         data         ={data.bee_list.bees}
-        renderItem   ={({item}) => <BeeListItem item={item} navigation={navigation} />}
+        renderItem   ={({ item }) => <BeeListItem item={item} navigation={navigation} />}
       />
       <Button title="more" onPress={fetcher(data, fetchMore)} />
     </SafeAreaView>
@@ -46,7 +46,7 @@ const renderError = (error) => {
 };
 
 const BeeListItem = ({ item, navigation }) => {
-  const bee = Bee.from(item)
+  const bee = Bee.from(item);
 
   const [beeDelMu] = useMutation(Ops.bee_del_mu, {
     update: (cache, { data: { bee_del: { dead_bee } } }) => {
@@ -55,25 +55,27 @@ const BeeListItem = ({ item, navigation }) => {
       const new_bees = bees.filter((bb) => (bb.letters !== bee.letters))
       const new_data = {
         ...old_data,
-        bee_list: { ...old_data.bee_list, bees: new_bees }
-      }
+        bee_list: { ...old_data.bee_list, bees: new_bees },
+      };
       // console.log(new_data)
       cache.writeQuery({
         query: Ops.bee_list_ids_qy,
         data:  new_data,
       })
-    }
-  })
-  
+    },
+  });
+
   const beeDelPlz = () => beeDelMu({ variables: { letters: bee.letters } })
 
   // AllBees.forEach((letters) => (beeDelMu({ variables: { letters } })))
-  
+
   return (
     <ListItem
       title={bee.dispLtrs}
+      style={styles.listItemStyle}
+      containerStyle={styles.listItemContainerStyle}
       onPress={(event) => navToBee(bee, event, navigation)}
-      rightIcon={{ name: 'cancel', onPress: beeDelPlz, color: '#dcc' }}
+      rightIcon={{ name: 'cancel', onPress: beeDelPlz, color: '#222' }}
     />
   )
 }
@@ -111,10 +113,24 @@ export default BeeListScreen
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
+    flex:                   1,
+    alignItems:             'center',
   },
   wordList: {
-    width: '100%',
+    width:                  '100%',
+    marginTop:              4,
   },
-})
+  listItemStyle: {
+    paddingHorizontal:      8,
+    paddingVertical:        4,
+    borderRadius:           8,
+  },
+  listItemContainerStyle: {
+    paddingVertical:        20,
+    borderRadius:           8,
+    shadowColor:    '#222',
+    shadowOffset:   { width: 0, height: 2 },
+    shadowRadius:   2,
+    shadowOpacity:  0.12,
+  },
+});

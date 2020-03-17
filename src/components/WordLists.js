@@ -10,14 +10,15 @@ const validStyle = (guess) => {
   if (guess.isPan)   return styles.entryPangram
   if (guess.nyt)     return styles.entryValid
   return styles.entryOther
-}
+};
 
 const guessItem = ({ item, delGuess }) => {
   const guess = item
   const vStyle = validStyle(guess)
   return (
     <View style={styles.guessBox}>
-      <Text numberOfLines={1} style={styles.guessInfo}>
+      <Text numberOfLines={1} style={guess.score < 1 ? styles.guessInfoInvalid : styles.guessInfo}>
+        {'+ '}
         {guess.score}
       </Text>
       <Text style={[styles.guess, vStyle]}>
@@ -30,7 +31,7 @@ const guessItem = ({ item, delGuess }) => {
       />
     </View>
   )
-}
+};
 
 const GuessList = ({ guesses, delGuess }) => (
   <SectionList
@@ -38,27 +39,27 @@ const GuessList = ({ guesses, delGuess }) => (
     keyExtractor={(guess) => (guess.word)}
     sections={guesses}
     renderItem={(info) => guessItem({ delGuess, ...info })}
-    ListEmptyComponent={(<Text>Make a Guess</Text>)}
+    ListEmptyComponent={(<Text style={styles.emptyGuessListTitle}>Guess your first word</Text>)}
     renderSectionHeader={({ section }) => (<Text style={styles.guessHeader}>{section.title}</Text>)}
   />
-)
+);
 
 const NogosList = ({ nogos, delGuess }) => (
   <FlatList
-    ListHeaderComponent={<Text style={styles.guessHeader}>No-Go</Text>}
+    ListHeaderComponent={<Text style={styles.guessHeader}>Invalid</Text>}
     style={[styles.wordList, styles.nogosList]}
     keyExtractor={(word, idx) => (idx.toString())}
     data={nogos}
     renderItem={(info) => guessItem({ delGuess, ...info })}
   />
-)
+);
 
 const WordLists = ({ guesses, nogos, delGuess }) => (
   <View style={styles.wordListBox}>
     <GuessList guesses={guesses} delGuess={delGuess} />
     <NogosList nogos={nogos} delGuess={delGuess} />
   </View>
-)
+);
 
 
 const styles = StyleSheet.create({
@@ -72,35 +73,61 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nogosList: {
-    backgroundColor: '#eee',
+    backgroundColor: '#EEE',
   },
   guessBox: {
     flexDirection:   'row',
     justifyContent:  'flex-start',
     alignItems:      'center',
     flexWrap:        'nowrap',
+    paddingVertical:  8,
+    paddingHorizontal:4,
+  },
+  emptyGuessListTitle: {
+    paddingTop:       6,
+    textAlign:        'center',
+    fontSize:        18,
   },
   guess: {
-    fontSize:          20,
-    flex:               8,
+    fontSize:          18,
+    flex:               6,
     padding:            2,
     paddingLeft:        5,
   },
   guessInfo: {
     fontSize:          16,
     padding:            2,
-    flex:               1,
+    flex:               2,
     flexWrap:           'nowrap',
-    textAlign:          'right',
+    textAlign:          'center',
+    borderRadius:       8,
+    borderWidth:        2,
+    borderColor:        '#51F097',
+    borderStyle:        'solid',
+  },
+  guessInfoInvalid: {
+    fontSize:          16,
+    padding:            2,
+    flex:               2,
+    flexWrap:           'nowrap',
+    textAlign:          'center',
+    borderRadius:   8,
+    borderWidth:    2,
+    borderStyle:    'solid',
   },
   guessHeader: {
-    fontSize: 20,
-    backgroundColor: '#eee',
+    fontSize:        20,
     textAlign:       'center',
-    padding:  2,
+    padding:         4,
+    backgroundColor: '#FFF',
+    borderRadius:    8,
+    shadowColor:     '#222',
+    shadowOffset:    { width: 0, height: 2 },
+    shadowRadius:    4,
+    shadowOpacity:   0.12,
   },
   entryValid: {
-    backgroundColor: '#cceecc',
+    padding:         4,
   },
   entryOther: {
     backgroundColor: '#eee',

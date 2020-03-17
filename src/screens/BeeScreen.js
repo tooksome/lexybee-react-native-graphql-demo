@@ -18,11 +18,11 @@ const BeeScreenComp = ({ bee }) => {
     bee.delGuess(word)
     beePutMu({ variables: bee.serialize() })
   }
-  
   return (
     <SafeAreaView style={styles.container}>
       <WordLists delGuess={delGuess} guesses={bee.guessesByScore()} nogos={bee.nogos} />
       <GuessInput bee={bee} />
+      {/*
       <View style={styles.guessBox}>
         <Text>
           {bee.summary('scr')}
@@ -31,9 +31,10 @@ const BeeScreenComp = ({ bee }) => {
           {bee.summary('nyt')}
         </Text>
       </View>
+      */}
     </SafeAreaView>
   );
-}
+};
 
 const renderError = (error) => {
   // console.log("Error in ListBees", JSON.stringify(error));
@@ -73,7 +74,7 @@ const BeeScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF',
     alignItems:      'center',
     width: '100%',
   },
