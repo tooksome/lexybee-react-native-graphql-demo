@@ -32,4 +32,4 @@ class Guess {
   }
 
 }
-  export default Guess
+export default Guess

@@ -1,7 +1,7 @@
 import * as React   from 'react'
 import { StyleSheet, View, FlatList, SafeAreaView,
 }                   from 'react-native'
-import { Button, ListItem, Text,
+import { Button, ListItem, Text, Icon,
 }                   from 'react-native-elements'
 import { useQuery, useMutation,
 }                   from '@apollo/client'
@@ -9,30 +9,33 @@ import { useQuery, useMutation,
 import Bee          from '../lib/Bee'
 import Ops          from '../graphql/Ops'
 import NewBee       from '../components/NewBee'
-
-import AllBees             from '../../data/bees.json'
+// import AllBees   from '../../data/bees.json'
 
 const BeeListScreen = ({ navigation }) => {
-  const { loading, error, data, fetchMore } = useQuery(Ops.bee_list_ids_qy);
-  if (loading) return <Text>Loading...</Text>;
-  if (error)   return renderError(error);
-  if (!data)   return <Text>No Data</Text>;
+  const { loading, error, data, fetchMore } = useQuery(Ops.bee_list_ids_qy)
+  if (loading)            return <Text>Loading...</Text>
+  if (error && (!data))   return renderError(error)
+  if (!data)              return <Text>No Data</Text>
   return (
     <SafeAreaView style={styles.container}>
       <NewBee />
       <FlatList
-        style        ={styles.wordList}
-        keyExtractor ={(letters, idx) => (letters + idx)}
-        data         ={data.bee_list.bees}
-        renderItem   ={({ item }) => <BeeListItem item={item} navigation={navigation} />}
+        style        = {styles.wordList}
+        keyExtractor = {(letters, idx) => (letters + idx)}
+        data         = {data.bee_list.bees}
+        renderItem   = {({ item }) => <BeeListItem item={item} navigation={navigation} />}
       />
       <Button title="more" onPress={fetcher(data, fetchMore)} />
+      <Button
+        icon         = {<Icon name="information" color="#FFF" />}
+        onPress      = {() => navigation.push("About")}
+      />
     </SafeAreaView>
   )
 }
 
 const renderError = (error) => {
-  console.log("Error in ListBees", JSON.stringify(error));
+  console.log("Error in ListBees", JSON.stringify(error))
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -42,28 +45,28 @@ const renderError = (error) => {
         </Text>
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const BeeListItem = ({ item, navigation }) => {
-  const bee = Bee.from(item);
+  const bee = Bee.from(item)
 
   const [beeDelMu] = useMutation(Ops.bee_del_mu, {
-    update: (cache, { data: { bee_del: { dead_bee } } }) => {
+    update: (cache, { data: { bee_del: { _dead_bee } } }) => {
       const old_data = cache.readQuery({ query: Ops.bee_list_ids_qy })
       const { bee_list: { bees } } = old_data
       const new_bees = bees.filter((bb) => (bb.letters !== bee.letters))
       const new_data = {
         ...old_data,
         bee_list: { ...old_data.bee_list, bees: new_bees },
-      };
+      }
       // console.log(new_data)
       cache.writeQuery({
         query: Ops.bee_list_ids_qy,
         data:  new_data,
       })
     },
-  });
+  })
 
   const beeDelPlz = () => beeDelMu({ variables: { letters: bee.letters } })
 
@@ -92,7 +95,7 @@ const fetcher = (data, fetchMore) => (() => {
     },
     updateQuery: (prev, { fetchMoreResult, ...rest }) => {
       console.log('uq', 'prev', prev, 'more', fetchMoreResult, 'rest', rest)
-      if (!fetchMoreResult) return prev;
+      if (!fetchMoreResult) return prev
       const ret = ({
         ...fetchMoreResult,
         bee_list: {
@@ -133,4 +136,4 @@ const styles = StyleSheet.create({
     shadowRadius:   2,
     shadowOpacity:  0.12,
   },
-});
+})

@@ -16,10 +16,17 @@ Dicts.lexMatches = (lex, letters) => {
   //
   const words    = Dicts[`${lex}_wds`].filter((wd) => re.test(wd))
   const grouped  = _.groupBy(words, 'length')
-  const topScore = words.reduce((tot, wd) =>
-    tot + (wd.length < 4 ? 0 : (wd.length == 4 ? 1 : wd.length)), 0)
+  const topScore = words.reduce((tot, wd) => {
+    if      (wd.length <   4) {
+      return tot
+    } else if (wd.length === 4) {
+      return tot + 1
+    } else {
+      return tot + wd.length
+    }
+  }, 0)
   const nums     = {}
-  _.range(4,15).forEach((nn) => nums[nn] = (grouped[nn]||[]).length)
+  _.range(4, 15).forEach((nn) => nums[nn] = (grouped[nn] || []).length) // eslint-disable-line
   //
   return { words, topScore, grouped, nums, num: words.length }
 }

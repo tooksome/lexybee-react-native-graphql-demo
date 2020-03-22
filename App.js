@@ -1,5 +1,5 @@
 import * as React              from 'react'
-import { Platform, StatusBar, StyleSheet, View, YellowBox,
+import { YellowBox,
 }                              from 'react-native'
 import { SplashScreen }        from 'expo'
 import * as Font               from 'expo-font'
@@ -72,10 +72,3 @@ export default function App(props) {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

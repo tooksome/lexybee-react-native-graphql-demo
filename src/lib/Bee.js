@@ -85,7 +85,7 @@ class Bee {
 
   delGuess(wd) {
     this.guesses = this.guesses.filter((guess) => guess.word !== wd)
-    this.nogos   = this.nogos.filter((guess) => guess.word !== wd)
+    this.nogos   = this.nogos.filter((guess)   => guess.word !== wd)
   }
 
   static byAlpha(aa, bb) {
@@ -97,7 +97,7 @@ class Bee {
   }
 
   lexMatches = (lex) => {
-    if (!this._lexMatches[lex]) { 
+    if (!this._lexMatches[lex]) {
       this._lexMatches[lex] = Dicts.lexMatches(lex, this.letters.toLowerCase())
     }
     return this._lexMatches[lex]
@@ -116,7 +116,7 @@ class Bee {
 
   wordHist(lex) {
     const hist = {}
-    _.range(0, 15).forEach((nn) => (hist[nn] = 0))
+    _.range(0, 15).forEach((nn) => (hist[nn] = 0)) // eslint-disable-line
     this.guesses.forEach((guess) => {
       if (guess[lex]) {
         hist[guess.len] = 1 + hist[guess.len]
@@ -128,7 +128,7 @@ class Bee {
   totScore() {
     return this.guesses.reduce((tot, guess) => (tot + guess.score), 0)
   }
-  
+
   serialize() {
     return {
       letters: this.letters,

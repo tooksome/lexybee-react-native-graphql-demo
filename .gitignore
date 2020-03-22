@@ -15,3 +15,5 @@ web-report/
 *[sS]ecret*
 
 .idea
+
+package-lock.json

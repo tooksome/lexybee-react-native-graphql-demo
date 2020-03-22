@@ -5,12 +5,10 @@ import { Button, Input, Icon,
 }                          from 'react-native-elements'
 import { useMutation,
 }                          from '@apollo/client';
-import { Formik }          from 'formik'
 import * as Yup            from 'yup'
 //
 import Bee                 from '../lib/Bee'
 import Ops                 from '../graphql/Ops'
-import AllBees             from '../../data/bees.json'
 
 const validationSchema = Yup.object().shape({
   letters: Yup
@@ -30,7 +28,7 @@ const NewBee = () => {
       const new_bees = bees.concat([bee])
       new_bees.sort((aa, bb) => ((aa.letters < bb.letters) ? -1 : 1))
       const new_data = { ...old_data,
-        bee_list: { ...old_data.bee_list, bees: new_bees }
+        bee_list: { ...old_data.bee_list, bees: new_bees },
       }
       // console.log(new_data)
       cache.writeQuery({
@@ -39,11 +37,6 @@ const NewBee = () => {
       })
     },
   })
-
-  // abusive bulk import
-  // AllBees.forEach(([ltrs, datestr]) => (beeAddMu({ variables: { letters: ltrs.toUpperCase(), datestr } })))
-
-  // AllBees.slice(5).forEach(([ltrs, datestr]) => (beeAddMu({ variables: { letters: ltrs.toUpperCase(), datestr } })))
 
   const addBeePlz = () => {
     beeAddMu({ variables: { letters: entry } })

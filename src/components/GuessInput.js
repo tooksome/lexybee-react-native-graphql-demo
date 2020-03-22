@@ -1,15 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Image, TouchableOpacity,
+import { StyleSheet, View, TouchableOpacity,
 }                          from 'react-native'
 import { Button, Input, Icon, Text,
 }                          from 'react-native-elements'
 import { useMutation }     from '@apollo/client'
-import { Formik }          from 'formik'
-import * as Yup            from 'yup'
 //
 import Layout              from '../lib/Layout'
 import Ops                 from '../graphql/Ops'
-import images         from '../constants/Images'
 
 const LetterButton = ({ letter, handler }) => (
   <TouchableOpacity
@@ -22,22 +19,26 @@ const LetterButton = ({ letter, handler }) => (
   </TouchableOpacity>
 )
 
-// bee_get({"letters":"CAIHLNP"}): {"__typename":"BeeGetResp","success":true,"message":"Bee 'CAIHLNP' gotten","bee":{"__ref":"Bee:{\"letters\":\"CAIHLNP\"}"}}
+// Example response
+//
+// bee_get({"letters":"CAIHLNP"}): {
+//   "__typename":"BeeGetResp","success":true,
+//   "message":"Bee 'CAIHLNP' gotten",
+//   "bee":{"__ref":"Bee:{\"letters\":\"CAIHLNP\"}"
+// }}
 
+const GuessInput = ({ bee }) => {
+  const [entry, setEntry] = useState('')
 
-const GuessInput = ({ bee, addToBee }) => {
-  const [entry, setEntry] = useState('');
-
-  const addLetter  = (letter) => setEntry(entry + letter);
-  const delLetter  = ()       => setEntry(entry.substring(0, entry.length - 1));
-  const clearEntry = ()       => setEntry('');
-  const [beePutMu] = useMutation(Ops.bee_put_mu);
+  const addLetter  = (letter) => setEntry(entry + letter)
+  const delLetter  = ()       => setEntry(entry.substring(0, entry.length - 1))
+  const clearEntry = ()       => setEntry('')
+  const [beePutMu] = useMutation(Ops.bee_put_mu)
 
   const addGuess = () => {
     if (bee.hasWord(entry)) { clearEntry(); return }
-    bee.addGuess(entry);
-    console.log('added', entry, bee.guesses);
-    beePutMu({ variables: bee.serialize() });
+    bee.addGuess(entry)
+    beePutMu({ variables: bee.serialize() })
     clearEntry()
   }
 
@@ -93,7 +94,7 @@ const GuessInput = ({ bee, addToBee }) => {
       </View>
     </View>
   )
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -102,10 +103,6 @@ const styles = StyleSheet.create({
     marginBottom:   24,
   },
   //
-  entryBox: {
-    flexDirection:  'row',
-    justifyContent: 'flex-start',
-  },
   guessInputRow: {
     width:          '100%',
     flexDirection:  'row',
@@ -186,6 +183,6 @@ const styles = StyleSheet.create({
     width:          '94%',
     alignItems:     'center',
   },
-});
+})
 
 export default GuessInput

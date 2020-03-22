@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
 import BeeListScreen            from '../screens/BeeListScreen'
 import BeeScreen                from '../screens/BeeScreen'
-
+import AboutScreen              from '../screens/AboutScreen'
 
 const Stack = createStackNavigator();
 
@@ -18,6 +18,10 @@ const AppNavigator = () => (
       options={{
         route: ({ route }) => ({ title: route.params.letters }),
       }}
+    />
+    <Stack.Screen
+      name="About"
+      component={AboutScreen}
     />
   </Stack.Navigator>
 )
