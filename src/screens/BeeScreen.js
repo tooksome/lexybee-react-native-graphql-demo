@@ -1,5 +1,5 @@
 import * as React     from 'react'
-import { StyleSheet, Text, View,
+import { StyleSheet, Text, View, KeyboardAvoidingView,
 }                     from 'react-native'
 import { Button,
 }                          from 'react-native-elements'
@@ -70,9 +70,9 @@ const BeeScreen = ({ navigation, route }) => {
   navigation.setOptions({ title: bee.dispLtrs })
   // console.log(bee.serialize().guesses)
   return (
-    <View style={styles.container}>
-      <BeeScreenComp bee={bee} />
-    </View>
+  <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={16} behavior="height">
+    <BeeScreenComp bee={bee} />
+  </KeyboardAvoidingView>
   )
 }
 

@@ -32,7 +32,8 @@ const NewBee = () => {
     },
     update: (cache, { data: { bee_put: { bee } } }) => {
       const old_data = cache.readQuery({ query: Ops.bee_list_ids_qy })
-      const { bee_list: { bees } } = old_data
+      let  { bee_list: { bees } } = old_data
+      bees = bees.filter((bb) => (bb.letters !== bee.letters))
       const new_bees = bees.concat([bee])
       new_bees.sort((aa, bb) => ((aa.letters < bb.letters) ? -1 : 1))
       const new_data = { ...old_data,
