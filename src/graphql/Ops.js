@@ -22,7 +22,7 @@ const Ops = {
 
   bee_list_qy: gql`
   query bee_list_qy($cursor: String) {
-    bee_list(limit: 200, cursor: $cursor) {
+    bee_list(limit: 20, cursor: $cursor) {
       bees { ...bee_frag }
       cursor
     }
@@ -32,7 +32,7 @@ const Ops = {
 
   bee_list_ids_qy: gql`
   query bee_list_qy($cursor: String) {
-    bee_list(limit: 231, cursor: $cursor) {
+    bee_list(limit: 20, cursor: $cursor) {
       bees { letters }
       cursor
     }

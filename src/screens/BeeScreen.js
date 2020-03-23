@@ -23,16 +23,14 @@ const BeeScreenComp = ({ bee }) => {
     <View style={styles.container}>
       <WordLists delGuess={delGuess} guesses={bee.guessesByScore()} nogos={bee.nogos} />
       <GuessInput bee={bee} />
-      {/*
-          <View style={styles.guessBox}>
-          <Text>
+      <View >
+        <Text>
           {bee.summary('scr')}
-          </Text>
-          <Text>
+        </Text>
+        <Text>
           {bee.summary('nyt')}
-          </Text>
-          </View>
-        */}
+        </Text>
+      </View>
     </View>
   )
 }

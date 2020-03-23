@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
   },
   entryValid: {
     backgroundColor:   '#ddeedd',
-    padding:           4,
   },
   entryOther: {
     backgroundColor:   '#eee',

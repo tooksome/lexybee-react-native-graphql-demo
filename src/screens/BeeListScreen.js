@@ -23,12 +23,8 @@ const BeeListScreen = ({ navigation }) => {
         style        = {styles.wordList}
         keyExtractor = {(letters, idx) => (letters + idx)}
         data         = {data.bee_list.bees}
+        onEndReached = {fetcher(data, fetchMore)}
         renderItem   = {({ item }) => <BeeListItem item={item} navigation={navigation} />}
-      />
-      <Button title="more" onPress={fetcher(data, fetchMore)} />
-      <Button
-        icon         = {<Icon name="information" color="#FFF" />}
-        onPress      = {() => navigation.push("About")}
       />
     </View>
   )

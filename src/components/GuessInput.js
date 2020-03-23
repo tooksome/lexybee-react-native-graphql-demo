@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   container: {
     width:             '100%',
     alignItems:        'center',
-    marginBottom:      24,
+    // marginBottom:      24,
   },
   //
   guessInputRow: {
