@@ -38,10 +38,15 @@ const baseTheme = {
   Input: {
     inputContainerStyle: { borderBottomColor: 'transparent' },
     inputStyle: {
-      fontSize:       20,
+      fontSize:       24,
       marginVertical: 4,
       marginRight:    0,
       paddingLeft:    8,
+    },
+  },
+  Button: {
+    buttonStyle: {
+      borderRadius:      8,
     },
   },
 }

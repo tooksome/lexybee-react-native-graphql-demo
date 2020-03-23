@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View,
+import { StyleSheet, View, ActivityIndicator,
 }                          from 'react-native'
 import { Button, Input, Icon,
 }                          from 'react-native-elements'
@@ -10,8 +10,8 @@ import * as Yup            from 'yup'
 import Bee                 from '../lib/Bee'
 import Ops                 from '../graphql/Ops'
 
-const validationSchema = Yup.object().shape({
-  letters: Yup
+const validator = Yup.object().shape({
+  entry: Yup
     .string()
     .label('Letters')
     .min(7, "Enter 7 letters")
@@ -20,8 +20,13 @@ const validationSchema = Yup.object().shape({
 
 
 const NewBee = () => {
-  const [entry, setEntry]  = useState('')
+  const [entry,        setEntry]       = useState('')
+  const [isSubmitting, setSubmitting]  = useState(false)
   const [beeAddMu] = useMutation(Ops.bee_put_mu, {
+    onCompleted() {
+      console.log('completed')
+      setSubmitting(false)
+    },
     update: (cache, { data: { bee_put: { bee } } }) => {
       const old_data = cache.readQuery({ query: Ops.bee_list_ids_qy })
       const { bee_list: { bees } } = old_data
@@ -39,10 +44,11 @@ const NewBee = () => {
   })
 
   const addBeePlz = () => {
+    setSubmitting(true)
     beeAddMu({ variables: { letters: entry } })
     setEntry('')
   }
-
+  // (!validationSchema.isValidSync({ entry }))
   return (
     <View style={styles.container}>
       <Input
@@ -55,12 +61,18 @@ const NewBee = () => {
         onChangeText     = {(text) => setEntry(Bee.normalize(text).toUpperCase())}
         onSubmitEditing  = {addBeePlz}
       />
-      <Button
-        title            =" New"
-        icon             ={<Icon name="add-circle-outline" color="#FFF" />}
-        onPress          ={addBeePlz}
-        style            ={styles.newBeeBtn}
-      />
+      {(isSubmitting
+        ? (<ActivityIndicator />)
+        : (
+          <Button
+            disabled         = {!validator.isValidSync({ entry })}
+            title            =" New"
+            icon             ={<Icon name="add-circle-outline" color="#FFF" />}
+            onPress          ={addBeePlz}
+            style            ={styles.newBeeBtn}
+          />
+        )
+      )}
     </View>
   )
 }
