@@ -143,24 +143,26 @@ class Bee {
 
   summary(lex) {
     const { grouped, topScore, num } = this.lexMatches(lex)
-    const beeHist = this.wordHist(lex)
+    const [count, beeHist] = this.wordHist(lex)
     const totHist = Object
       .entries(grouped)
       .map(([kk, vv]) => [kk, vv.length])
       .map(([kk, vv]) => `${kk}:${beeHist[kk]}/${vv}`)
       .join(' ')
-    return `${this.totScore()}/${topScore} (${this.guesses.length}/${num}): ${totHist}`
+    return `${this.totScore()}/${topScore} (${count}/${num}): ${totHist}`
   }
 
   wordHist(lex) {
-    const hist = {}
+    const hist  = {}
+    let   count = 0
     _.range(0, 15).forEach((nn) => (hist[nn] = 0)) // eslint-disable-line
     this.guesses.forEach((guess) => {
       if (guess[lex]) {
+        count = count + 1
         hist[guess.len] = 1 + hist[guess.len]
       }
     })
-    return hist
+    return [count, hist]
   }
 
   totScore() {
