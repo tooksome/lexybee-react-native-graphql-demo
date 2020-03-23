@@ -40,14 +40,15 @@ const guessItem = ({ item, showScore = true, delGuess }) => {
   )
 };
 
-const GuessList = ({ guesses, delGuess }) => (
+const GuessList = ({ guesses, delGuess, wordListRef }) => (
   <SectionList
     style               = {[styles.wordList]}
     keyExtractor        = {(guess) => (guess.word)}
     sections            = {guesses}
     renderItem          = {(info) => guessItem({ delGuess, ...info })}
     ListEmptyComponent  = {(<Text style={styles.emptyGuessListTitle}>Guess your first word</Text>)}
-    renderSectionHeader = {({ section }) => (<Text style={styles.guessHeader}>{section.title}</Text>)}
+    renderSectionHeader = {({ section }) => (<Text style={styles.glHeader}>{section.title}</Text>)}
+    ref={wordListRef}
   />
 );
 
@@ -61,10 +62,10 @@ const NogosList = ({ nogos, delGuess }) => (
   />
 );
 
-const WordLists = ({ guesses, nogos, delGuess }) => (
+const WordLists = ({ guesses, nogos, delGuess, wordListRef }) => (
   <View style={styles.wordListBox}>
-    <GuessList guesses={guesses} delGuess={delGuess} />
-    <NogosList nogos={nogos} delGuess={delGuess} />
+    <GuessList guesses={guesses} delGuess={delGuess} wordListRef={wordListRef} />
+    <NogosList nogos={nogos}     delGuess={delGuess} />
   </View>
 );
 
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   guessInfoInvalid: {
     borderColor:       '#eee',
   },
-  guessHeader: {
+  glHeader: {
     fontSize:          20,
     textAlign:         'center',
     padding:           4,

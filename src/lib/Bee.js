@@ -70,11 +70,23 @@ class Bee {
       .value()
   }
 
+  sectionForGuess = (guess) => {
+    const gBS          = this.guessesByScore()
+    const lens         = gBS.map((ll) => (ll.data[0].len))
+    const sectionIndex = _.findIndex(lens, (len) => (len === guess.len))
+    if (sectionIndex < 0) return null
+    let itemIndex    = _.findIndex(gBS[sectionIndex].data,
+                                   (gg) => (gg.word === guess.word))
+    if (itemIndex < 0) { itemIndex = 0 }
+    // console.log(lens, sectionIndex, gBS[sectionIndex], itemIndex)
+    return ({ sectionIndex, itemIndex, viewPosition: 0.25 })
+  }
+
   addGuess(wd) {
-    if (wd.length === 0) { return }
+    if (wd.length === 0) { return {} }
     const word = wd.toLowerCase()
-    if (this.hasWord(word)) return;
     const guess = new Guess(word, this)
+    if (this.hasWord(word)) { return guess }
     if (guess.nogo) {
       this.nogos = this.nogos.concat(guess)
       this.nogos.sort(Bee.byAlpha)
@@ -82,6 +94,7 @@ class Bee {
       this.guesses = this.guesses.concat(guess)
       this.guesses.sort(Bee.byAlpha)
     }
+    return guess
   }
 
   delGuess(wd) {

@@ -25,7 +25,7 @@ const LetterButton = ({ letter, handler }) => (
 //   "bee":{"__ref":"Bee:{\"letters\":\"CAIHLNP\"}"
 // }}
 
-const GuessInput = ({ bee }) => {
+const GuessInput = ({ bee, onAdd }) => {
   const [entry, setEntry] = useState('')
 
   const addLetter  = (letter) => setEntry(entry + letter)
@@ -34,10 +34,12 @@ const GuessInput = ({ bee }) => {
   const [beePutMu] = useMutation(Ops.bee_put_mu)
 
   const addGuess = () => {
-    console.log(bee.serialize(), entry, bee.hasWord(entry))
     if (bee.hasWord(entry)) { clearEntry(); return }
-    bee.addGuess(entry)
-    beePutMu({ variables: bee.serialize() })
+    const guess = bee.addGuess(entry)
+    beePutMu({
+      variables: bee.serialize(),
+    }) // .then(() => onAdd({ guess }))
+    onAdd({ guess })
     clearEntry()
   }
 
@@ -46,16 +48,16 @@ const GuessInput = ({ bee }) => {
       <View style={styles.guessInputRow}>
         <View style={styles.guessInputFieldContainer}>
           <Input
-            style           = {[styles.entryText]}
-            inputStyle      = {styles.entryText}
-            autoCapitalize  = "none"
-            autoCorrect     = {false}
+            style            = {[styles.entryText]}
+            inputStyle       = {styles.entryText}
+            autoCapitalize   = "none"
+            autoCorrect      = {false}
             autoCompleteType = "off"
-            value={entry}
-            onChangeText={(text) => setEntry(bee.normEntry(text))}
-            onSubmitEditing ={() => { addGuess() }}
+            value            = {entry}
+            onChangeText     = {(text) => setEntry(bee.normEntry(text))}
+            onSubmitEditing  = {addGuess}
+            blurOnSubmit     = {false}
           />
-
           <Icon
             name      = "backspace"
             style     = {[styles.clearEntryTextButton]}
@@ -126,9 +128,6 @@ const styles = StyleSheet.create({
     shadowOffset:   { width: 0, height: 2 },
     shadowRadius:      4,
     shadowOpacity:     0.12,
-  },
-  disabled: {
-    backgroundColor:   '#DDD',
   },
   entryIcon: {
     color:             '#FFF',

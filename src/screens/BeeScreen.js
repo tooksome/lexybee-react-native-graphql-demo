@@ -1,4 +1,5 @@
-import * as React     from 'react'
+import React, { useState, useRef,
+}                     from 'react'
 import { StyleSheet, Text, View, KeyboardAvoidingView,
 }                     from 'react-native'
 import { Button,
@@ -12,18 +13,36 @@ import GuessInput     from '../components/GuessInput'
 import Ops            from '../graphql/Ops'
 import Bee            from '../lib/Bee'
 
+
+const els = {}
+
 const BeeScreenComp = ({ bee }) => {
-  const [beePutMu] = useMutation(Ops.bee_put_mu)
+  const [beePutMu]  = useMutation(Ops.bee_put_mu)
 
   const delGuess = (word) => {
     bee.delGuess(word)
     beePutMu({ variables: bee.serialize() })
   }
 
+  const onAdd = ({ guess, el }) => {
+    const sectionForGuess = bee.sectionForGuess(guess)
+    // console.log(guess, bee.serialize(), sectionForGuess)
+    try {
+      el.scrollToLocation({ ...sectionForGuess, animated: false })
+    } catch(err) {
+      console.log(err)
+    } 
+  }
+
   return (
     <View style={styles.container}>
-      <WordLists delGuess={delGuess} guesses={bee.guessesByScore()} nogos={bee.nogos} />
-      <GuessInput bee={bee} />
+      <WordLists
+        delGuess={delGuess}
+        guesses={bee.guessesByScore()}
+        nogos={bee.nogos}
+        wordListRef={(el) => { els.wordList = el }}
+      />
+      <GuessInput bee={bee} onAdd={(params) => onAdd({ ...params, el: els.wordList })} />
       <View>
         <Text>
           {bee.summary('scr')}
