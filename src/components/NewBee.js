@@ -6,6 +6,8 @@ import { Button, Input, Icon,
 import { useMutation,
 }                          from '@apollo/client';
 import * as Yup            from 'yup'
+
+import { useNavigation }   from '@react-navigation/native'
 //
 import Bee                 from '../lib/Bee'
 import Ops                 from '../graphql/Ops'
@@ -22,10 +24,11 @@ const validator = Yup.object().shape({
 const NewBee = () => {
   const [entry,        setEntry]       = useState('')
   const [isSubmitting, setSubmitting]  = useState(false)
+  const navigation = useNavigation()
   const [beeAddMu] = useMutation(Ops.bee_put_mu, {
-    onCompleted() {
-      console.log('completed')
+    onCompleted({ bee_put: { bee } }) {
       setSubmitting(false)
+      navigation.push("Bee", { title: bee.letters, letters: bee.letters })
     },
     update: (cache, { data: { bee_put: { bee } } }) => {
       const old_data = cache.readQuery({ query: Ops.bee_list_ids_qy })
