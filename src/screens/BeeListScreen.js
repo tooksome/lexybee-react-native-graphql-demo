@@ -1,5 +1,5 @@
 import * as React   from 'react'
-import { StyleSheet, View, FlatList,
+import { StyleSheet, View, FlatList, Alert,
 }                   from 'react-native'
 import { Button, ListItem, Text, Icon,
 }                   from 'react-native-elements'
@@ -62,7 +62,16 @@ const BeeListItem = ({ item, navigation }) => {
     },
   })
 
-  const beeDelPlz = () => beeDelMu({ variables: { letters: bee.letters } })
+  const beeDelPlz = () => {
+    Alert.alert(
+      `Delete '${bee.letters}'?`,
+      '',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: () => beeDelMu({ variables: { letters: bee.letters } }) },
+      ],
+    )
+  }
   // AllBees.forEach((letters) => (beeDelMu({ variables: { letters } })))
 
   return (
@@ -78,7 +87,7 @@ const BeeListItem = ({ item, navigation }) => {
 }
 
 const navToBee = (bee, event, navigation) => {
-  navigation.push("Bee", { title: bee.letters, letters: bee.letters })
+  navigation.navigate("Bee", { title: bee.letters, letters: bee.letters })
 }
 
 const fetcher = (data, fetchMore) => (() => {

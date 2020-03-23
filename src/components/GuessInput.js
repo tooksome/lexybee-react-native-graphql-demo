@@ -71,16 +71,16 @@ const GuessInput = ({ bee }) => {
           />
 
           <Icon
-            name    = "backspace"
-            style   = {[styles.clearEntryTextButton]}
-            onPress = {delLetter}
+            name      = "backspace"
+            style     = {[styles.clearEntryTextButton]}
+            onPress   = {delLetter}
           />
         </View>
         <Button
-          buttonStyle={[ styles.addEntryBtn, ((entry.length === 0) && styles.disabled), ]}
-          onPress={addGuess}
-          disabled={entry.length === 0}
-          icon={<Icon name="check" iconStyle={styles.entryIcon} />}
+          buttonStyle = {[styles.addEntryBtn]}
+          onPress     = {addGuess}
+          disabled    = {entry.length === 0}
+          icon = {<Icon name="check" iconStyle={styles.entryIcon} />}
         />
       </View>
 
@@ -91,7 +91,7 @@ const GuessInput = ({ bee }) => {
         }
       </View>
     </View>
-          )
+  )
 }
 
 let btnWidth = ((Layout.window.width - 65) / 7)
