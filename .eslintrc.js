@@ -51,6 +51,7 @@ module.exports = {
     "react/require-default-props":            0,
     "react/jsx-props-no-multi-spaces":        0,
     "react/jsx-equals-spacing":               0,
+    "react/jsx-one-expression-per-line":      0,
     "key-spacing":                            0,
     "react/state-in-constructor":             0,
     "jsx-a11y/accessible-emoji":              0,

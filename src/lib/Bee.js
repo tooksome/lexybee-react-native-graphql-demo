@@ -9,11 +9,34 @@ class Bee {
     this.letters     = Bee.normalize(ltrs)
     this.mainLetter  = this.letters[0]  //eslint-disable-line
     this.pangramRe   = Bee.makePangramRe(this.letters)
-    this.rejectRe     = Bee.makeRejectRe(this.letters)
+    this.rejectRe    = Bee.makeRejectRe(this.letters)
     this.guesses     = []
     this.nogos       = []
     this._lexMatches = {}
+    this._allWords   = null
+    this.hints   = this.getHints()
   }
+
+  getHints() {
+    return (this
+      .allWords
+      .filter((wd) => (wd.length >= 4))
+      .filter((wd) => (! this.hasWord(wd)))
+      .map((wd) => new Guess(wd.toLowerCase(), this))
+    )
+  }
+
+  get allWords() {
+    if (! this._allWords) {
+      const nyt = this.lexMatches('nyt')
+      const scr = this.lexMatches('scr')
+      this._allWords   = _.sortedUniq(
+        _.sortBy(scr.words.concat(nyt.words), ['length', _.identity]),
+      )
+    }
+    return this._allWords
+  }
+      
 
   static normalize(ltrs) {
     const lonly = ltrs.replace(/[^A-Za-z]/g, '')
@@ -58,6 +81,36 @@ class Bee {
     text.toLowerCase().replace(this.rejectRe, '')
   )
 
+  addGuess(wd) {
+    if (wd.length === 0) { return {} }
+    const word = wd.toLowerCase()
+    const guess = new Guess(word, this)
+    if (this.hasWord(word)) { return guess }
+    if (guess.nogo) {
+      this.nogos = this.nogos.concat(guess)
+      this.nogos.sort(Bee.byAlpha)
+    } else {
+      this.guesses   = this.guesses.concat(guess)
+      this.hints = this.getHints()
+      this.guesses.sort(Bee.byAlpha)
+    }
+    return guess
+  }
+
+  delGuess(wd) {
+    this.guesses   = this.guesses.filter((guess) => guess.word !== wd)
+    this.nogos     = this.nogos.filter((guess)   => guess.word !== wd)
+    this.hints = this.getHints()
+  }
+
+  static byAlpha(aa, bb) {
+    return (aa.word < bb.word ? -1 : 1)
+  }
+
+  static byScore(aa, bb) {
+    return (aa.score < bb.score ? -1 : Bee.byAlpha(aa, bb))
+  }
+
   guessesByScore = () => {
     const { nums:nyt_nums } = this.lexMatches('nyt')
     const { nums:scr_nums } = this.lexMatches('scr')
@@ -70,6 +123,13 @@ class Bee {
       .value()
   }
 
+  lexMatches = (lex) => {
+    if (! this._lexMatches[lex]) {
+      this._lexMatches[lex] = Dicts.lexMatches(lex, this.letters.toLowerCase())
+    }
+    return this._lexMatches[lex]
+  }
+
   sectionForGuess = (guess) => {
     const gBS          = this.guessesByScore()
     const lens         = gBS.map((ll) => (ll.data[0].len))
@@ -79,41 +139,6 @@ class Bee {
     if (itemIndex < 0) { itemIndex = 0 }
     // console.log(lens, sectionIndex, gBS[sectionIndex], itemIndex)
     return ({ sectionIndex, itemIndex, viewPosition: 0.25 })
-  }
-
-  addGuess(wd) {
-    if (wd.length === 0) { return {} }
-    const word = wd.toLowerCase()
-    const guess = new Guess(word, this)
-    if (this.hasWord(word)) { return guess }
-    if (guess.nogo) {
-      this.nogos = this.nogos.concat(guess)
-      this.nogos.sort(Bee.byAlpha)
-    } else {
-      this.guesses = this.guesses.concat(guess)
-      this.guesses.sort(Bee.byAlpha)
-    }
-    return guess
-  }
-
-  delGuess(wd) {
-    this.guesses = this.guesses.filter((guess) => guess.word !== wd)
-    this.nogos   = this.nogos.filter((guess)   => guess.word !== wd)
-  }
-
-  static byAlpha(aa, bb) {
-    return (aa.word < bb.word ? -1 : 1)
-  }
-
-  static byScore(aa, bb) {
-    return (aa.score < bb.score ? -1 : Bee.byAlpha(aa, bb))
-  }
-
-  lexMatches = (lex) => {
-    if (! this._lexMatches[lex]) {
-      this._lexMatches[lex] = Dicts.lexMatches(lex, this.letters.toLowerCase())
-    }
-    return this._lexMatches[lex]
   }
 
   summary(lex) {
@@ -152,9 +177,10 @@ class Bee {
   }
 
   static from(obj) {
-    const bee =  Object.assign(new Bee(obj.letters), obj)
+    const bee   =  Object.assign(new Bee(obj.letters), obj)
     bee.guesses = bee.guesses.map((gg) => new Guess(gg, bee))
     bee.nogos   = bee.nogos.map((gg)   => new Guess(gg, bee))
+    bee.hints   = bee.getHints()
     return bee
   }
 

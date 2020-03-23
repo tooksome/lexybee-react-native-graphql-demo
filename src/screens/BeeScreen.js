@@ -1,7 +1,8 @@
-import React          from 'react'
-import { StyleSheet, Text, View, KeyboardAvoidingView,
+import React, { useState,
+}                     from 'react'
+import { StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity,
 }                     from 'react-native'
-import { Button,
+import { Button, Icon,
 }                          from 'react-native-elements'
 import { useQuery, useMutation,
 }                     from '@apollo/client'
@@ -15,8 +16,8 @@ import Bee            from '../lib/Bee'
 
 const els = {}
 
-const BeeScreenComp = ({ bee }) => {
-  const [beePutMu]  = useMutation(Ops.bee_put_mu)
+const BeeScreenComp = ({ bee, reveal, showHints }) => {
+  const [beePutMu]          = useMutation(Ops.bee_put_mu)
 
   const delGuess = (word) => {
     bee.delGuess(word)
@@ -36,10 +37,13 @@ const BeeScreenComp = ({ bee }) => {
   return (
     <View style={styles.container}>
       <WordLists
-        delGuess={delGuess}
-        guesses={bee.guessesByScore()}
-        nogos={bee.nogos}
-        wordListRef={(el) => { els.wordList = el }}
+        delGuess    = {delGuess}
+        guesses     = {bee.guessesByScore()}
+        nogos       = {bee.nogos}
+        hints       = {bee.hints}
+        reveal      = {reveal}
+        showHints   = {showHints}
+        wordListRef = {(el) => { els.wordList = el }}
       />
       <GuessInput bee={bee} onAdd={(params) => onAdd({ ...params, el: els.wordList })} />
       <View>
@@ -54,10 +58,50 @@ const BeeScreenComp = ({ bee }) => {
   )
 }
 
+const HintBar = ({ reveal, incReveal, showHints, setShowHints }) => (
+  <View style={[styles.hintsHeader]}>
+    {showHints
+    && (
+      <View style={[styles.hintsHeader]}>
+        <Button
+          title       = "-"
+          onPress     = {() => incReveal(-1)}
+          buttonStyle = {styles.mutedButton}
+          titleStyle  = {styles.hintsHeaderText}
+        />
+        <Text style   = {styles.hintsHeaderText}>({reveal})</Text>
+        <Button
+          title       = "+"
+          onPress     = {() => incReveal(1)}
+          buttonStyle = {styles.mutedButton}
+          titleStyle  = {styles.hintsHeaderText}
+        />
+      </View>
+    )}
+    <Icon
+      name        = {showHints ? 'visibility' : 'visibility-off'}
+      iconStyle   = {styles.showHintsBtn}
+      onPress     = {() => setShowHints(! showHints)}
+    />
+  </View>
+)
+
 const BeeScreen = ({ navigation, route }) => {
   const { params = {} } = route
-  const { letters } = params
+  const { letters }     = params
+  const [reveal,    setReveal]    = useState(0)
+  const [showHints, setShowHints] = useState(false)
+  const incReveal = ((inc) => setReveal(_.clamp(reveal + inc, 0, 15)))
+  
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HintBar reveal={reveal} incReveal={incReveal} showHints={showHints} setShowHints={setShowHints} />
+      ),
+    })
+  }, [navigation, reveal, setReveal, showHints, setShowHints])
   //
+
   const { loading, error, data } = useQuery(Ops.bee_get_qy, {
     variables: { letters }, pollInterval: 5000 })
   if (loading)         return <Text>Loading...</Text>
@@ -69,10 +113,12 @@ const BeeScreen = ({ navigation, route }) => {
   //
   const bee = Bee.from(data.bee_get.bee)
   navigation.setOptions({ title: bee.dispLtrs })
+
+  //
   // console.log(bee.serialize().guesses)
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={16} behavior="height">
-      <BeeScreenComp bee={bee} />
+      <BeeScreenComp bee={bee} reveal={reveal} showHints={showHints} />
     </KeyboardAvoidingView>
   )
 }
@@ -101,6 +147,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     alignItems:      'center',
     width:           '100%',
+  },
+  hintsHeader: {
+    flex:              1,
+    flexDirection:     'row',
+    justifyContent:    'flex-start',
+    alignItems:        'center',
+    flexWrap:          'nowrap',
+  },
+  hintsHeaderText: {
+    color:             '#222',
+    fontSize:          18,
+  },
+  mutedButton: {
+    backgroundColor:   'transparent',
+    padding:           5,
+  },
+  showHintsBtn: {
+    fontSize:          30,
+    paddingHorizontal: 10,
   },
 })
 

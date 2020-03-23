@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import { Dicts } from './Dicts'
 
+const Bowdlerizers = _.range(0, 15).map((len) => new RegExp(`^(.*?)(.{0,${len}})$`))
+
 class Guess {
   constructor(wd, bee) {
     this.word    = wd.toLowerCase()
@@ -11,7 +13,16 @@ class Guess {
     this.valid   = (this.nyt || this.scr)
     this.hasMain = this.word.includes(bee.mainLetter)
     this.score   = this.getScore(this.word)
-    this.hidden  = false
+  }
+
+  revealed(reveal) {
+    if (! _.isNumber(reveal)) { return this.word }
+    const stars   = _.padEnd('', (this.len - reveal), '*')
+    if (reveal <= 0) { return stars }
+    const bowler  = Bowdlerizers[reveal] || Bowdlerizers[15]
+    return this.word.replace(
+      bowler,
+      (_m, hide, show) => (stars + show)) // eslint-disable-line
   }
 
   getScore() {
@@ -26,7 +37,7 @@ class Guess {
   }
 
   get color() {
-    if (! this.valid)  return '#eecccc'
+    if (! this.valid) return '#eecccc'
     if (this.isPan)   return '#ddddff'
     if (this.nyt)     return '#cceecc'
     return 'dddddd'

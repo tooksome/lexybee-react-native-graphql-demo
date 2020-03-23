@@ -1,7 +1,8 @@
-import * as React     from 'react'
+import React, { useState,
+}                     from 'react'
 import { StyleSheet, Text, View, FlatList, SectionList,
 }                     from 'react-native'
-import { Icon,
+import { Icon, Button,
 }                     from 'react-native-elements'
 
 const validStyle = (guess) => {
@@ -13,7 +14,7 @@ const validStyle = (guess) => {
   return styles.entryOther
 }
 
-const guessItem = ({ item, showScore = true, delGuess }) => {
+const guessItem = ({ item, showScore = true, delGuess, reveal = null }) => {
   const guess = item
   const vStyle = validStyle(guess)
   return (
@@ -29,13 +30,15 @@ const guessItem = ({ item, showScore = true, delGuess }) => {
         )}
 
       <Text style={styles.guess}>
-        {guess.word}
+        {guess.revealed(reveal)}
       </Text>
-      <Icon
-        name="cancel"
-        iconStyle={[styles.clearEntry]}
-        onPress={() => delGuess(guess.word)}
-      />
+      { delGuess && (
+          <Icon
+            name="cancel"
+            iconStyle={[styles.clearEntry]}
+            onPress={() => delGuess(guess.word)}
+          />
+        )}
     </View>
   )
 }
@@ -54,7 +57,7 @@ const GuessList = ({ guesses, delGuess, wordListRef }) => (
 
 const NogosList = ({ nogos, delGuess }) => (
   <FlatList
-    ListHeaderComponent = {<Text style={styles.guessHeader}>Invalid</Text>}
+    ListHeaderComponent = {<Text style={styles.glHeader}>Invalid</Text>}
     style               = {[styles.wordList, styles.nogosList]}
     keyExtractor        = {(word, idx) => (idx.toString())}
     data                = {nogos}
@@ -62,13 +65,30 @@ const NogosList = ({ nogos, delGuess }) => (
   />
 )
 
-const WordLists = ({ guesses, nogos, delGuess, wordListRef }) => (
-  <View style={styles.wordListBox}>
-    <GuessList guesses={guesses} delGuess={delGuess} wordListRef={wordListRef} />
-    <NogosList nogos={nogos}     delGuess={delGuess} />
-  </View>
-)
 
+const HintsList = ({ hints, reveal }) => {
+  return (
+    <FlatList
+      ListHeaderComponent = {<Text style={styles.glHeader}>Hints ({reveal})</Text>}
+      style               = {[styles.wordList, styles.nogosList]}
+      keyExtractor        = {(word, idx) => (idx.toString())}
+      data                = {hints}
+      renderItem          = {(info) => guessItem({ showScore: false, reveal, ...info })}
+    />
+  )
+}
+
+const WordLists = ({ guesses, nogos, hints, delGuess, wordListRef, reveal, showHints }) => (
+  <View style={styles.wordListBox}>
+    <GuessList guesses={guesses}  delGuess={delGuess} wordListRef={wordListRef} />
+    {(showHints
+      ? (<HintsList hints={hints} reveal={reveal} />)
+      : (<NogosList nogos={nogos}     delGuess={delGuess} />)
+    )}
+  </View>
+  )
+
+// 
 
 const styles = StyleSheet.create({
   wordListBox: {
@@ -120,6 +140,7 @@ const styles = StyleSheet.create({
     borderColor:       '#eee',
   },
   glHeader: {
+    flex:              1,
     fontSize:          20,
     textAlign:         'center',
     padding:           4,
