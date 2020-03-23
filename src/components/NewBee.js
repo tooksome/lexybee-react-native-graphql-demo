@@ -21,7 +21,7 @@ const validator = Yup.object().shape({
 })
 
 
-const NewBee = () => {
+const NewBee = ({ onChangeLtrs }) => {
   const [entry,        setEntry]       = useState('')
   const [isSubmitting, setSubmitting]  = useState(false)
   const navigation = useNavigation()
@@ -50,8 +50,15 @@ const NewBee = () => {
   const addBeePlz = () => {
     setSubmitting(true)
     beeAddMu({ variables: { letters: entry } })
-    setEntry('')
+    updateEntry('')
   }
+
+  const updateEntry = (text) => {
+    const normText = Bee.normalize(text).toUpperCase()
+    onChangeLtrs(normText)
+    setEntry(normText)
+  }
+
   // (!validationSchema.isValidSync({ entry }))
   return (
     <View style={styles.container}>
@@ -62,7 +69,7 @@ const NewBee = () => {
         autoCapitalize   = "none"
         autoCorrect      = {false}
         autoCompleteType = "off"
-        onChangeText     = {(text) => setEntry(Bee.normalize(text).toUpperCase())}
+        onChangeText     = {updateEntry}
         onSubmitEditing  = {addBeePlz}
       />
       {(isSubmitting

@@ -19,11 +19,12 @@ const BeeScreenComp = ({ bee }) => {
     bee.delGuess(word)
     beePutMu({ variables: bee.serialize() })
   }
+
   return (
     <View style={styles.container}>
       <WordLists delGuess={delGuess} guesses={bee.guessesByScore()} nogos={bee.nogos} />
       <GuessInput bee={bee} />
-      <View >
+      <View>
         <Text>
           {bee.summary('scr')}
         </Text>
@@ -31,24 +32,6 @@ const BeeScreenComp = ({ bee }) => {
           {bee.summary('nyt')}
         </Text>
       </View>
-    </View>
-  )
-}
-
-const renderError = ({ error, navigation }) => {
-  console.log("Error in ListBees", JSON.stringify(error)) // eslint-disable-line
-  return (
-    <View style={styles.container}>
-      <View>
-        <Text>
-          Error:
-          {JSON.stringify(error)}
-        </Text>
-      </View>
-      <Button
-        title="Home"
-        onPress={navigation.popToTop}
-      />
     </View>
   )
 }
@@ -70,9 +53,27 @@ const BeeScreen = ({ navigation, route }) => {
   navigation.setOptions({ title: bee.dispLtrs })
   // console.log(bee.serialize().guesses)
   return (
-  <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={16} behavior="height">
-    <BeeScreenComp bee={bee} />
-  </KeyboardAvoidingView>
+    <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={16} behavior="height">
+      <BeeScreenComp bee={bee} />
+    </KeyboardAvoidingView>
+  )
+}
+
+const renderError = ({ error, navigation }) => {
+  console.log("Error in ListBees", JSON.stringify(error)) // eslint-disable-line
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text>
+          Error:
+          {JSON.stringify(error)}
+        </Text>
+      </View>
+      <Button
+        title="Home"
+        onPress={navigation.popToTop}
+      />
+    </View>
   )
 }
 

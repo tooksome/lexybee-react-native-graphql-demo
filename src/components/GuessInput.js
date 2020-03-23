@@ -34,6 +34,7 @@ const GuessInput = ({ bee }) => {
   const [beePutMu] = useMutation(Ops.bee_put_mu)
 
   const addGuess = () => {
+    console.log(bee.serialize(), entry, bee.hasWord(entry))
     if (bee.hasWord(entry)) { clearEntry(); return }
     bee.addGuess(entry)
     beePutMu({ variables: bee.serialize() })
@@ -45,29 +46,14 @@ const GuessInput = ({ bee }) => {
       <View style={styles.guessInputRow}>
         <View style={styles.guessInputFieldContainer}>
           <Input
-            style={[styles.entryText]}
-            inputStyle={styles.entryText}
+            style           = {[styles.entryText]}
+            inputStyle      = {styles.entryText}
             autoCapitalize  = "none"
             autoCorrect     = {false}
             autoCompleteType = "off"
             value={entry}
-          /*
-            leftIcon={(
-              <View style={styles.entryBox}>
-                <Icon name="backspace" iconStyle={styles.entryIcon} onPress={delLetter} />
-                <Icon name="cancel"    iconStyle={styles.entryIcon} onPress={clearEntry} />
-              </View>
-            )}
-            */
             onChangeText={(text) => setEntry(bee.normEntry(text))}
-          /*
-            rightIcon={(
-              <View style={[styles.entryIconContainer]}>
-                <Icon name="check" iconStyle={styles.entryIcon} onPress={addGuess} />
-              </View>
-            )}
-            */
-            onSubmitEditing ={addGuess}
+            onSubmitEditing ={() => { addGuess() }}
           />
 
           <Icon

@@ -1,10 +1,12 @@
-import * as React   from 'react'
+import React, { useState
+}                   from 'react'
 import { StyleSheet, View, FlatList, Alert,
 }                   from 'react-native'
-import { Button, ListItem, Text, Icon,
+import { Button, ListItem, Text, Icon, Input,
 }                   from 'react-native-elements'
 import { useQuery, useMutation,
 }                   from '@apollo/client'
+import _            from 'lodash'
 //
 import Bee          from '../lib/Bee'
 import Ops          from '../graphql/Ops'
@@ -12,17 +14,21 @@ import NewBee       from '../components/NewBee'
 // import AllBees   from '../../data/bees.json'
 
 const BeeListScreen = ({ navigation }) => {
+  const [filter, setFilter] = useState('')
   const { loading, error, data, fetchMore } = useQuery(Ops.bee_list_ids_qy)
   if (loading)            return <Text>Loading...</Text>
   if (error && (!data))   return renderError(error)
   if (!data)              return <Text>No Data</Text>
+  const filter_re = Bee.makePangramRe(filter)
   return (
     <View style={styles.container}>
-      <NewBee />
+      <NewBee
+        onChangeLtrs = {(text) => setFilter(text.toUpperCase())}
+      />
       <FlatList
         style        = {styles.wordList}
         keyExtractor = {(letters, idx) => (letters + idx)}
-        data         = {data.bee_list.bees}
+        data         = {data.bee_list.bees.filter((bb) => filter_re.test(bb.letters))}
         onEndReached = {fetcher(data, fetchMore)}
         renderItem   = {({ item }) => <BeeListItem item={item} navigation={navigation} />}
       />
@@ -31,7 +37,7 @@ const BeeListScreen = ({ navigation }) => {
 }
 
 const renderError = (error) => {
-  console.log("Error in ListBees", JSON.stringify(error))
+  console.log("Error in ListBees", JSON.stringify(error)) // eslint-disable-line
   return (
     <View  style={styles.container}>
       <Text>
@@ -54,7 +60,6 @@ const BeeListItem = ({ item, navigation }) => {
         ...old_data,
         bee_list: { ...old_data.bee_list, bees: new_bees },
       }
-      // console.log(new_data)
       cache.writeQuery({
         query: Ops.bee_list_ids_qy,
         data:  new_data,
@@ -97,16 +102,18 @@ const fetcher = (data, fetchMore) => (() => {
       cursor: data.bee_list.cursor,
     },
     updateQuery: (prev, { fetchMoreResult, ...rest }) => {
-      console.log('uq', 'prev', prev, 'more', fetchMoreResult, 'rest', rest)
+      // console.log('uq', 'prev', prev, 'more', fetchMoreResult, 'rest', rest)
       if (!fetchMoreResult) return prev
+      let new_bees = [
+        ...prev.bee_list.bees,
+        ...fetchMoreResult.bee_list.bees,
+      ]
+      new_bees = _.sortedUniq(_.sortBy(new_bees, 'letters'))
       const ret = ({
         ...fetchMoreResult,
         bee_list: {
           ...fetchMoreResult.bee_list,
-          bees: [
-            ...prev.bee_list.bees,
-            ...fetchMoreResult.bee_list.bees,
-          ],
+          bees: new_bees,
         },
       })
       // console.log(ret)

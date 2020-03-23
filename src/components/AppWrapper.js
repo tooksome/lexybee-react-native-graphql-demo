@@ -73,7 +73,7 @@ const AppWrapper = ({ children }) => {
   const theme    = (colorScheme === 'dark' ? rneDarkTheme : baseTheme)
   const barStyle = (colorScheme === 'dark' ? 'light-content' : 'dark-content')
 
-  console.log(colors, theme, 'scheme', colorScheme, 'colors', rnColors, 'dkTheme', DarkTheme, DefaultTheme)
+  // console.log(colors, theme, 'scheme', colorScheme, 'colors', rnColors, 'dkTheme', DarkTheme, DefaultTheme)
 
   return (
     <SafeAreaView style={{ ...styles.container, backgroundColor: navTheme.colors.background }}>

@@ -42,7 +42,7 @@ class Bee {
   }
 
   static makePangramRe(letters) {
-    return new RegExp(letters.split('').map((ltr) => `(?=.*${ltr})`).join(''))
+    return new RegExp(letters.split('').map((ltr) => `(?=.*${ltr})`).join(''), 'i')
   }
 
   static makeRejectRe(letters) {
@@ -71,6 +71,7 @@ class Bee {
   }
 
   addGuess(wd) {
+    if (wd.length === 0) { return }
     const word = wd.toLowerCase()
     if (this.hasWord(word)) return;
     const guess = new Guess(word, this)
