@@ -1,5 +1,5 @@
 import * as React   from 'react'
-import { StyleSheet, View, FlatList, SafeAreaView,
+import { StyleSheet, View, FlatList,
 }                   from 'react-native'
 import { Button, ListItem, Text, Icon,
 }                   from 'react-native-elements'
@@ -17,7 +17,7 @@ const BeeListScreen = ({ navigation }) => {
   if (error && (!data))   return renderError(error)
   if (!data)              return <Text>No Data</Text>
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <NewBee />
       <FlatList
         style        = {styles.wordList}
@@ -30,21 +30,19 @@ const BeeListScreen = ({ navigation }) => {
         icon         = {<Icon name="information" color="#FFF" />}
         onPress      = {() => navigation.push("About")}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 
 const renderError = (error) => {
   console.log("Error in ListBees", JSON.stringify(error))
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>
-          Error:
-          {JSON.stringify(error)}
-        </Text>
-      </View>
-    </SafeAreaView>
+    <View  style={styles.container}>
+      <Text>
+        Error:
+        {JSON.stringify(error)}
+      </Text>
+    </View>
   )
 }
 
@@ -69,16 +67,16 @@ const BeeListItem = ({ item, navigation }) => {
   })
 
   const beeDelPlz = () => beeDelMu({ variables: { letters: bee.letters } })
-
   // AllBees.forEach((letters) => (beeDelMu({ variables: { letters } })))
 
   return (
     <ListItem
-      title={bee.dispLtrs}
-      style={styles.listItemStyle}
-      containerStyle={styles.listItemContainerStyle}
-      onPress={(event) => navToBee(bee, event, navigation)}
-      rightIcon={{ name: 'cancel', onPress: beeDelPlz, color: '#222' }}
+      title          = {bee.dispLtrs}
+      style          = {styles.listItemStyle}
+      titleStyle     = {styles.listTextStyle}
+      containerStyle = {styles.listItemContainerStyle}
+      onPress        = {(event) => navToBee(bee, event, navigation)}
+      rightIcon      = {{ name: 'cancel', onPress: beeDelPlz, color: '#222' }}
     />
   )
 }
@@ -128,12 +126,15 @@ const styles = StyleSheet.create({
     paddingVertical:        4,
     borderRadius:           8,
   },
+  listTextStyle: {
+    fontSize: 24,
+  },
   listItemContainerStyle: {
-    paddingVertical:        20,
+    paddingVertical:        12,
     borderRadius:           8,
-    shadowColor:    '#222',
-    shadowOffset:   { width: 0, height: 2 },
-    shadowRadius:   2,
-    shadowOpacity:  0.12,
+    shadowColor:            '#222',
+    shadowOffset:           { width: 0, height: 2 },
+    shadowRadius:           2,
+    shadowOpacity:          0.12,
   },
 })

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, TouchableOpacity,
+import { StyleSheet, View,
 }                          from 'react-native'
 import { Button, Input, Icon, Text,
 }                          from 'react-native-elements'
@@ -9,14 +9,12 @@ import Layout              from '../lib/Layout'
 import Ops                 from '../graphql/Ops'
 
 const LetterButton = ({ letter, handler }) => (
-  <TouchableOpacity
-    title={letter}
-    onPress={() => handler(letter)}
-    style={styles.letterButton}
-    titleStyle={styles.letterButtonText}
-  >
-    <Text style={styles.letterButtonText}>{letter}</Text>
-  </TouchableOpacity>
+  <Button
+    title       = {letter}
+    onPress     = {() => handler(letter)}
+    buttonStyle = {styles.letterButton}
+    titleStyle  = {styles.letterButtonText}
+  />
 )
 
 // Example response
@@ -49,12 +47,11 @@ const GuessInput = ({ bee }) => {
           <Input
             style={[styles.entryText]}
             inputStyle={styles.entryText}
-            inputContainerStyle={{ borderBottomColor:'transparent' }}
             autoCapitalize  = "none"
             autoCorrect     = {false}
             autoCompleteType = "off"
             value={entry}
-            /*
+          /*
             leftIcon={(
               <View style={styles.entryBox}>
                 <Icon name="backspace" iconStyle={styles.entryIcon} onPress={delLetter} />
@@ -63,7 +60,7 @@ const GuessInput = ({ bee }) => {
             )}
             */
             onChangeText={(text) => setEntry(bee.normEntry(text))}
-            /*
+          /*
             rightIcon={(
               <View style={[styles.entryIconContainer]}>
                 <Icon name="check" iconStyle={styles.entryIcon} onPress={addGuess} />
@@ -73,18 +70,19 @@ const GuessInput = ({ bee }) => {
             onSubmitEditing ={addGuess}
           />
 
-          <Icon name="backspace" style={[styles.clearEntryTextButton]} onPress={delLetter} />
+          <Icon
+            name    = "backspace"
+            style   = {[styles.clearEntryTextButton]}
+            onPress = {delLetter}
+          />
         </View>
-        <TouchableOpacity
-          style={entry.length === 0 ? styles.disabled : styles.entryIconContainer}
+        <Button
+          buttonStyle={[ styles.addEntryBtn, ((entry.length === 0) && styles.disabled), ]}
           onPress={addGuess}
           disabled={entry.length === 0}
-        >
-          <Icon name="check" iconStyle={styles.entryIcon} />
-        </TouchableOpacity>
-
+          icon={<Icon name="check" iconStyle={styles.entryIcon} />}
+        />
       </View>
-
 
       <View style={styles.buttonRow}>
         {
@@ -93,95 +91,98 @@ const GuessInput = ({ bee }) => {
         }
       </View>
     </View>
-  )
+          )
 }
+
+let btnWidth = ((Layout.window.width - 65) / 7)
+if (btnWidth < 32) { btnWidth = 32 }
 
 const styles = StyleSheet.create({
   container: {
-    width:          '100%',
-    alignItems:     'center',
-    marginBottom:   24,
+    width:             '100%',
+    alignItems:        'center',
+    marginBottom:      24,
   },
   //
   guessInputRow: {
-    width:          '100%',
-    flexDirection:  'row',
-    flexWrap:       'nowrap',
-    justifyContent: 'flex-start',
-    alignItems:     'center',
-    alignSelf:      'flex-start',
-    paddingHorizontal:16,
-    paddingVertical: 8,
-    backgroundColor:'#FFF',
+    width:             '100%',
+    flexDirection:     'row',
+    flexWrap:          'nowrap',
+    justifyContent:    'flex-start',
+    alignItems:        'center',
+    alignSelf:         'flex-start',
+    paddingHorizontal: 16,
+    paddingVertical:   8,
+    backgroundColor:   '#FFF',
   },
   guessInputFieldContainer: {
-    flex: 1,
-    flexDirection:  'row',
-    justifyContent: 'flex-end',
-    alignItems:     'center',
-    paddingHorizontal:16,
-    borderRadius:    8,
-    backgroundColor: '#F8F8F8',
+    flex:              1,
+    flexDirection:     'row',
+    justifyContent:    'flex-end',
+    alignItems:        'center',
+    paddingHorizontal: 12,
+    borderRadius:      8,
+    backgroundColor:   '#F8F8F8',
   },
   clearEntryTextButton: {
-    padding:        10,
+    padding:           5,
   },
   entryText: {
-    fontSize:       24,
-    flex:           4,
-    marginVertical: 8,
-    marginRight:    8,
-    paddingLeft:    12,
+    flex:              4,
   },
-  entryIconContainer: {
-    flexDirection:  'column',
-    alignItems:     'center',
-    marginLeft:     16,
-    marginRight:    2,
-    paddingVertical:16,
-    paddingHorizontal:20,
-    backgroundColor:'#27C16B',
-    borderRadius:   8,
-    shadowColor:    '#222',
+  addEntryBtn: {
+    marginLeft:        12,
+    marginRight:       2,
+    paddingVertical:   16,
+    paddingHorizontal: 16,
+    backgroundColor:   '#27C16B',
+    borderRadius:      8,
+    shadowColor:       '#222',
     shadowOffset:   { width: 0, height: 2 },
-    shadowRadius:   4,
-    shadowOpacity:  0.12,
+    shadowRadius:      4,
+    shadowOpacity:     0.12,
+  },
+  addEntryButton: {
+    flexDirection:     'column',
+    alignItems:        'center',
+    marginLeft:        12,
+    marginRight:       2,
+    paddingVertical:   16,
+    paddingHorizontal: 16,
+    backgroundColor:   '#27C16B',
+    borderRadius:      8,
+    shadowColor:       '#222',
+    shadowOffset:   { width: 0, height: 2 },
+    shadowRadius:      4,
+    shadowOpacity:     0.12,
   },
   disabled: {
-    flexDirection:  'column',
-    alignItems:     'center',
-    marginLeft:     16,
-    marginRight:    2,
-    paddingVertical:16,
-    paddingHorizontal:20,
-    backgroundColor:'#DDD',
-    borderRadius:   8,
+    backgroundColor:   '#DDD',
   },
   entryIcon: {
-    color:          '#FFF',
+    color:             '#FFF',
   },
   letterButton: {
-    padding:        5,
-    margin:         5,
-    width:          Layout.window.width / 8,
-    fontSize:       34,
-    backgroundColor:'#F7D476',
-    borderRadius:   8,
-    borderWidth:    2,
-    borderColor:    '#DA8A49',
-    borderStyle:    'solid',
+    padding:           3,
+    margin:            5,
+    width:             btnWidth,
+    backgroundColor:   '#eef',
+    borderRadius:      8,
+    borderWidth:       2,
+    borderColor:       '#99b',
+    borderStyle:       'solid',
   },
   letterButtonText: {
-    fontSize:       34,
-    fontWeight:     '600',
-    textAlign:      'center',
-    color:          '#5C3601',
+    fontSize:          (btnWidth <= 32 ? 24 : 34),
+    fontWeight:        '600',
+    textAlign:         'center',
+    color:             '#5C3601',
   },
   buttonRow: {
-    flexDirection:  'row',
-    justifyContent: 'space-around',
-    width:          '94%',
-    alignItems:     'center',
+    flexDirection:     'row',
+    justifyContent:    'space-around',
+    width:             '94%',
+    alignItems:        'center',
   },
 })
 

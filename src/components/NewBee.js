@@ -47,7 +47,6 @@ const NewBee = () => {
     <View style={styles.container}>
       <Input
         containerStyle   = {styles.lettersInput}
-        inputContainerStyle= {{ borderBottomColor:'transparent' }}
         value            = {entry}
         placeholder      = "New Letters; Main Letter First"
         autoCapitalize   = "none"

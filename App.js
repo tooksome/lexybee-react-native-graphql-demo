@@ -14,6 +14,7 @@ import useLinking              from './src/navigation/useLinking'
 import { typeDefs, resolvers } from './src/graphql/resolvers'
 import Cache                   from './src/graphql/Cache'
 import Secrets                 from './Secrets'
+import { AppWrapper }          from './src/components/AppWrapper'
 
 // Don't yell at me about other modules' error messages
 YellowBox.ignoreWarnings(['RootErrorBoundary'])
@@ -65,9 +66,19 @@ export default function App(props) {
   } else {
     return (
       <ApolloProvider client={apollo}>
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <AppNavigator />
-        </NavigationContainer>
+        <AppWrapper>
+          {
+            ({ navTheme }) => (
+              <NavigationContainer
+                ref={containerRef}
+                initialState={initialNavigationState}
+                theme={navTheme}
+              >
+                <AppNavigator />
+              </NavigationContainer>
+            )
+          }
+        </AppWrapper>
       </ApolloProvider>
     );
   }

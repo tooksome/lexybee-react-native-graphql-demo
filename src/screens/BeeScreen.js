@@ -1,5 +1,5 @@
 import * as React     from 'react'
-import { StyleSheet, Text, View, SafeAreaView,
+import { StyleSheet, Text, View,
 }                     from 'react-native'
 import { Button,
 }                          from 'react-native-elements'
@@ -20,7 +20,7 @@ const BeeScreenComp = ({ bee }) => {
     beePutMu({ variables: bee.serialize() })
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <WordLists delGuess={delGuess} guesses={bee.guessesByScore()} nogos={bee.nogos} />
       <GuessInput bee={bee} />
       {/*
@@ -33,14 +33,14 @@ const BeeScreenComp = ({ bee }) => {
           </Text>
           </View>
         */}
-    </SafeAreaView>
+    </View>
   )
 }
 
 const renderError = ({ error, navigation }) => {
   console.log("Error in ListBees", JSON.stringify(error)) // eslint-disable-line
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <Text>
           Error:
@@ -51,7 +51,7 @@ const renderError = ({ error, navigation }) => {
         title="Home"
         onPress={navigation.popToTop}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 
