@@ -6,19 +6,20 @@ import { DefaultTheme, DarkTheme,
 import { ThemeProvider, colors,
 }                              from 'react-native-elements'
 import { Appearance, AppearanceProvider, useColorScheme,
-}                              from 'react-native-appearance';
+}                              from 'react-native-appearance'
 
-Appearance.getColorScheme();
-const colorSchemes = {
-  light: {
-    // background: '#eec',
-    // text:       '333',
-  },
-  dark: {
-    // background: '#333',
-    // text:       '#fff',
-  },
-}
+Appearance.getColorScheme()
+/* const colorSchemes = {
+ *   light: {
+ *     // background: '#eec',
+ *     // text:       '333',
+ *   },
+ *   dark: {
+ *     // background: '#333',
+ *     // text:       '#fff',
+ *   },
+ * }
+ *  */
 
 const baseTheme = {
   colors: {
@@ -66,9 +67,8 @@ const rneDarkTheme = {
 }
 
 const AppWrapper = ({ children }) => {
-  const colorScheme = useColorScheme();
-  // const rnColors = colorSchemes[colorScheme] || colorSchemes.light;
-  const rnColors = colorSchemes.light;
+  const colorScheme = useColorScheme()
+  // const rnColors = colorSchemes[colorScheme] || colorSchemes.light
   const navTheme = (colorScheme === 'dark' ? DarkTheme    : DefaultTheme)
   const theme    = (colorScheme === 'dark' ? rneDarkTheme : baseTheme)
   const barStyle = (colorScheme === 'dark' ? 'light-content' : 'dark-content')
@@ -87,12 +87,13 @@ const AppWrapper = ({ children }) => {
   )
 }
 
-const tintColor = '#2f95dc';
+const tintColor = '#2f95dc'
 
+export default AppWrapper
 export {
   AppWrapper,
-  /* tintColor,
-   * tabIconDefault:       '#ccc',
+  tintColor,
+  /* tabIconDefault:       '#ccc',
    * tabIconSelected:      tintColor,
    * tabBar:               '#fefefe',
    * errorBackground:      'red',
@@ -101,12 +102,11 @@ export {
    * warningText:          '#666804',
    * noticeBackground:     tintColor,
    * noticeText:           '#fff', */
-
-};
+}
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-});
+})

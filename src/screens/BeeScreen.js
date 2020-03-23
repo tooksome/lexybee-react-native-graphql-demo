@@ -1,5 +1,4 @@
-import React, { useState, useRef,
-}                     from 'react'
+import React          from 'react'
 import { StyleSheet, Text, View, KeyboardAvoidingView,
 }                     from 'react-native'
 import { Button,
@@ -29,9 +28,9 @@ const BeeScreenComp = ({ bee }) => {
     // console.log(guess, bee.serialize(), sectionForGuess)
     try {
       el.scrollToLocation({ ...sectionForGuess, animated: false })
-    } catch(err) {
-      console.log(err)
-    } 
+    } catch (err) {
+      console.log(err) // eslint-disable-line
+    }
   }
 
   return (
@@ -62,9 +61,9 @@ const BeeScreen = ({ navigation, route }) => {
   const { loading, error, data } = useQuery(Ops.bee_get_qy, {
     variables: { letters }, pollInterval: 5000 })
   if (loading)         return <Text>Loading...</Text>
-  if (error && !data)  return renderError({ error, navigation })
-  if (!data)           return <Text>No Data</Text>
-  if (!data.bee_get.success) {
+  if (error && ! data)  return renderError({ error, navigation })
+  if (! data)           return <Text>No Data</Text>
+  if (! data.bee_get.success) {
     return renderError({ error: data.bee_get.message, navigation })
   }
   //

@@ -1,8 +1,8 @@
-import React, { useState
+import React, { useState,
 }                   from 'react'
 import { StyleSheet, View, FlatList, Alert,
 }                   from 'react-native'
-import { Button, ListItem, Text, Icon, Input,
+import { ListItem, Text,
 }                   from 'react-native-elements'
 import { useQuery, useMutation,
 }                   from '@apollo/client'
@@ -17,8 +17,8 @@ const BeeListScreen = ({ navigation }) => {
   const [filter, setFilter] = useState('')
   const { loading, error, data, fetchMore } = useQuery(Ops.bee_list_ids_qy)
   if (loading)            return <Text>Loading...</Text>
-  if (error && (!data))   return renderError(error)
-  if (!data)              return <Text>No Data</Text>
+  if (error && (! data))   return renderError(error)
+  if (! data)              return <Text>No Data</Text>
   const filter_re = Bee.makePangramRe(filter)
   return (
     <View style={styles.container}>
@@ -96,14 +96,14 @@ const navToBee = (bee, event, navigation) => {
 }
 
 const fetcher = (data, fetchMore) => (() => {
-  if (!data.bee_list.cursor) { return }
+  if (! data.bee_list.cursor) { return }
   fetchMore({
     variables: {
       cursor: data.bee_list.cursor,
     },
-    updateQuery: (prev, { fetchMoreResult, ...rest }) => {
-      // console.log('uq', 'prev', prev, 'more', fetchMoreResult, 'rest', rest)
-      if (!fetchMoreResult) return prev
+    updateQuery: (prev, { fetchMoreResult, ..._rest }) => {
+      // console.log('uq', 'prev', prev, 'more', fetchMoreResult, 'rest', _rest)
+      if (! fetchMoreResult) return prev
       let new_bees = [
         ...prev.bee_list.bees,
         ...fetchMoreResult.bee_list.bees,

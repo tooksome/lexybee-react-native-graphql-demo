@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View,
 }                          from 'react-native'
-import { Button, Input, Icon, Text,
+import { Button, Input, Icon,
 }                          from 'react-native-elements'
 import { useMutation }     from '@apollo/client'
 //
@@ -34,7 +34,7 @@ const GuessInput = ({ bee, onAdd }) => {
   const [beePutMu] = useMutation(Ops.bee_put_mu)
 
   const addGuess = () => {
-    if (bee.hasWord(entry)) { clearEntry(); return }
+    if (bee.hasWord(entry)) { clearEntry(); onAdd({ guess: { word: entry, len: entry.length } }); return }
     const guess = bee.addGuess(entry)
     beePutMu({
       variables: bee.serialize(),

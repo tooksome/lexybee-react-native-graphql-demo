@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useRef,
+}                          from 'react'
 import { StyleSheet, View, ActivityIndicator,
 }                          from 'react-native'
 import { Button, Input, Icon,
 }                          from 'react-native-elements'
 import { useMutation,
-}                          from '@apollo/client';
+}                          from '@apollo/client'
 import * as Yup            from 'yup'
-
 import { useNavigation }   from '@react-navigation/native'
 //
 import Bee                 from '../lib/Bee'
@@ -24,7 +24,9 @@ const validator = Yup.object().shape({
 const NewBee = ({ onChangeLtrs }) => {
   const [entry,        setEntry]       = useState('')
   const [isSubmitting, setSubmitting]  = useState(false)
-  const navigation = useNavigation()
+  const navigation   = useNavigation()
+  const lettersInput = useRef(null)
+  //
   const [beeAddMu] = useMutation(Ops.bee_put_mu, {
     onCompleted({ bee_put: { bee } }) {
       setSubmitting(false)
@@ -48,6 +50,10 @@ const NewBee = ({ onChangeLtrs }) => {
   })
 
   const addBeePlz = () => {
+    if (! validator.isValidSync({ entry })) {
+      lettersInput.current.shake()
+      return
+    }
     setSubmitting(true)
     beeAddMu({ variables: { letters: entry } })
     updateEntry('')
@@ -65,18 +71,19 @@ const NewBee = ({ onChangeLtrs }) => {
       <Input
         containerStyle   = {styles.lettersInput}
         value            = {entry}
-        placeholder      = "New Letters; Main Letter First"
+        placeholder      = "Letters (Key Letter 1st)"
         autoCapitalize   = "none"
         autoCorrect      = {false}
         autoCompleteType = "off"
         onChangeText     = {updateEntry}
         onSubmitEditing  = {addBeePlz}
+        ref              = {lettersInput}
       />
       {(isSubmitting
         ? (<ActivityIndicator />)
         : (
           <Button
-            disabled         = {!validator.isValidSync({ entry })}
+            disabled         = {! validator.isValidSync({ entry })}
             title            =" New"
             icon             ={<Icon name="add-circle-outline" color="#FFF" />}
             onPress          ={addBeePlz}
@@ -105,6 +112,6 @@ const styles = StyleSheet.create({
     flex:             10,
     borderRadius:     8,
   },
-});
+})
 
 export default NewBee

@@ -1,12 +1,12 @@
-import React           from 'react';
+import React           from 'react'
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
-}                      from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
+}                      from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
 //
-import Colors from '../lib/Colors';
+import Colors from '../lib/Colors'
 
 
 const WebLink = ({ url, children, style, ...props }) => (
@@ -21,7 +21,7 @@ const WebLink = ({ url, children, style, ...props }) => (
       {children}
     </Text>
   </TouchableOpacity>
-);
+)
 
 export default WebLink
 
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
     color:      Colors.linkColor,
     textAlign: 'center',
   },
-});
+})

@@ -1,16 +1,17 @@
-import * as React     from 'react';
+import * as React     from 'react'
 import { StyleSheet, Text, View, FlatList, SectionList,
-}                     from 'react-native';
+}                     from 'react-native'
 import { Icon,
 }                     from 'react-native-elements'
 
 const validStyle = (guess) => {
-  if (!guess.valid)  return styles.entryBad
+  if (! guess.valid)  return styles.entryBad
   if (guess.nogo)    return styles.nogo
   if (guess.isPan)   return styles.entryPangram
   if (guess.nyt)     return styles.entryValid
+  if (guess.scr)     return styles.entryScrabble
   return styles.entryOther
-};
+}
 
 const guessItem = ({ item, showScore = true, delGuess }) => {
   const guess = item
@@ -23,22 +24,21 @@ const guessItem = ({ item, showScore = true, delGuess }) => {
             numberOfLines={1}
             style={[styles.guessInfo, (guess.score < 1 ? styles.guessInfoInvalid : styles.guessInfoGood)]}
           >
-            {guess.score}
+            {(guess.score > 0) ? guess.score : ' '}
           </Text>
-        )
-      }
-      
+        )}
+
       <Text style={styles.guess}>
         {guess.word}
       </Text>
       <Icon
         name="cancel"
-        style={[styles.clearEntry]}
+        iconStyle={[styles.clearEntry]}
         onPress={() => delGuess(guess.word)}
       />
     </View>
   )
-};
+}
 
 const GuessList = ({ guesses, delGuess, wordListRef }) => (
   <SectionList
@@ -50,7 +50,7 @@ const GuessList = ({ guesses, delGuess, wordListRef }) => (
     renderSectionHeader = {({ section }) => (<Text style={styles.glHeader}>{section.title}</Text>)}
     ref={wordListRef}
   />
-);
+)
 
 const NogosList = ({ nogos, delGuess }) => (
   <FlatList
@@ -60,14 +60,14 @@ const NogosList = ({ nogos, delGuess }) => (
     data                = {nogos}
     renderItem          = {(info) => guessItem({ delGuess, showScore: false, ...info })}
   />
-);
+)
 
 const WordLists = ({ guesses, nogos, delGuess, wordListRef }) => (
   <View style={styles.wordListBox}>
     <GuessList guesses={guesses} delGuess={delGuess} wordListRef={wordListRef} />
     <NogosList nogos={nogos}     delGuess={delGuess} />
   </View>
-);
+)
 
 
 const styles = StyleSheet.create({
@@ -109,9 +109,9 @@ const styles = StyleSheet.create({
     flex:              2,
     flexWrap:          'nowrap',
     textAlign:         'center',
-    /* borderRadius:      8,
-     * borderWidth:       2,
-     * borderStyle:       'solid', */
+    /* borderRadius:   8,
+     * borderWidth:    2,
+     * borderStyle:    'solid', */
   },
   guessInfoGood: {
     borderColor:       '#51F097',
@@ -134,7 +134,10 @@ const styles = StyleSheet.create({
     shadowOpacity:     0.12,
   },
   entryValid: {
-    backgroundColor:   '#ddeedd',
+    backgroundColor:   '#ccf0df',
+  },
+  entryScrabble: {
+    backgroundColor:   '#ddebdd',
   },
   entryOther: {
     backgroundColor:   '#eee',
@@ -146,6 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor:   '#ddddee',
   },
   clearEntry: {
+    color: "#c8c8c8",
   },
 })
 

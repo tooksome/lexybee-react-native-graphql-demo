@@ -21,8 +21,8 @@ class Bee {
     const luniq = [...new Set(larr)].slice(0, 7)
     const firl  = luniq.shift()
     luniq.sort((aa, bb) => {
-      if (VOWELS.has(aa) && !VOWELS.has(bb)) return -1
-      if (VOWELS.has(bb) && !VOWELS.has(aa)) return 1
+      if (VOWELS.has(aa) && ! VOWELS.has(bb)) return -1
+      if (VOWELS.has(bb) && ! VOWELS.has(aa)) return 1
       return ((aa > bb) ? 1 : -1)
     })
     return [firl, ...luniq].join('')
@@ -34,7 +34,7 @@ class Bee {
   }
 
   get larry() {
-    return this.letters.split('');
+    return this.letters.split('')
   }
 
   isPan(word) {
@@ -75,8 +75,7 @@ class Bee {
     const lens         = gBS.map((ll) => (ll.data[0].len))
     const sectionIndex = _.findIndex(lens, (len) => (len === guess.len))
     if (sectionIndex < 0) return null
-    let itemIndex    = _.findIndex(gBS[sectionIndex].data,
-                                   (gg) => (gg.word === guess.word))
+    let itemIndex    = _.findIndex(gBS[sectionIndex].data, (gg) => (gg.word === guess.word))
     if (itemIndex < 0) { itemIndex = 0 }
     // console.log(lens, sectionIndex, gBS[sectionIndex], itemIndex)
     return ({ sectionIndex, itemIndex, viewPosition: 0.25 })
@@ -111,7 +110,7 @@ class Bee {
   }
 
   lexMatches = (lex) => {
-    if (!this._lexMatches[lex]) {
+    if (! this._lexMatches[lex]) {
       this._lexMatches[lex] = Dicts.lexMatches(lex, this.letters.toLowerCase())
     }
     return this._lexMatches[lex]
