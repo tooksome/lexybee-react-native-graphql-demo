@@ -1,8 +1,7 @@
-import React, { useState,
-}                     from 'react'
+import React          from 'react'
 import { StyleSheet, Text, View, FlatList, SectionList,
 }                     from 'react-native'
-import { Icon, Button,
+import { Icon,
 }                     from 'react-native-elements'
 
 const validStyle = (guess) => {
@@ -32,7 +31,8 @@ const guessItem = ({ item, showScore = true, delGuess, reveal = null }) => {
       <Text style={styles.guess}>
         {guess.revealed(reveal)}
       </Text>
-      { delGuess && (
+      { delGuess
+        && (
           <Icon
             name="cancel"
             iconStyle={[styles.clearEntry]}
@@ -66,17 +66,16 @@ const NogosList = ({ nogos, delGuess }) => (
 )
 
 
-const HintsList = ({ hints, reveal }) => {
-  return (
-    <FlatList
-      ListHeaderComponent = {<Text style={styles.glHeader}>Hints ({reveal})</Text>}
-      style               = {[styles.wordList, styles.nogosList]}
-      keyExtractor        = {(word, idx) => (idx.toString())}
-      data                = {hints}
-      renderItem          = {(info) => guessItem({ showScore: false, reveal, ...info })}
-    />
-  )
-}
+const HintsList = ({ hints, reveal }) => (
+  <FlatList
+    ListHeaderComponent = {<Text style={styles.glHeader}>Hints ({reveal})</Text>}
+    style               = {[styles.wordList, styles.nogosList]}
+    keyExtractor        = {(word, idx) => (idx.toString())}
+    data                = {hints}
+    renderItem          = {(info) => guessItem({ showScore: false, reveal, ...info })}
+  />
+)
+
 
 const WordLists = ({ guesses, nogos, hints, delGuess, wordListRef, reveal, showHints }) => (
   <View style={styles.wordListBox}>
@@ -86,9 +85,9 @@ const WordLists = ({ guesses, nogos, hints, delGuess, wordListRef, reveal, showH
       : (<NogosList nogos={nogos}     delGuess={delGuess} />)
     )}
   </View>
-  )
+)
 
-// 
+//
 
 const styles = StyleSheet.create({
   wordListBox: {

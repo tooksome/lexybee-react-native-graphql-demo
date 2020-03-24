@@ -36,7 +36,7 @@ class Bee {
     }
     return this._allWords
   }
-      
+
 
   static normalize(ltrs) {
     const lonly = ltrs.replace(/[^A-Za-z]/g, '')

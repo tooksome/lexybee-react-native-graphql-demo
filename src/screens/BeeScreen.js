@@ -1,6 +1,6 @@
 import React, { useState,
 }                     from 'react'
-import { StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity,
+import { StyleSheet, Text, View, KeyboardAvoidingView,
 }                     from 'react-native'
 import { Button, Icon,
 }                          from 'react-native-elements'
@@ -92,7 +92,7 @@ const BeeScreen = ({ navigation, route }) => {
   const [reveal,    setReveal]    = useState(0)
   const [showHints, setShowHints] = useState(false)
   const incReveal = ((inc) => setReveal(_.clamp(reveal + inc, 0, 15)))
-  
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
