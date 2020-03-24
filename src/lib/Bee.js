@@ -158,7 +158,7 @@ class Bee {
     _.range(0, 15).forEach((nn) => (hist[nn] = 0)) // eslint-disable-line
     this.guesses.forEach((guess) => {
       if (guess[lex]) {
-        count = count + 1
+        count += 1
         hist[guess.len] = 1 + hist[guess.len]
       }
     })

@@ -14,12 +14,14 @@ import NewBee       from '../components/NewBee'
 // import AllBees   from '../../data/bees.json'
 
 const BeeListScreen = ({ navigation }) => {
-  const [filter, setFilter] = useState('')
+  const [filter,     setFilter]     = useState('')
+  const [refreshing, setRefreshing] = useState(false)
   const { loading, error, data, fetchMore } = useQuery(Ops.bee_list_ids_qy)
   if (loading)            return <Text>Loading...</Text>
   if (error && (! data))   return renderError(error)
   if (! data)              return <Text>No Data</Text>
   const filter_re = Bee.makePangramRe(filter)
+  //
   return (
     <View style={styles.container}>
       <NewBee
@@ -29,7 +31,8 @@ const BeeListScreen = ({ navigation }) => {
         style        = {styles.wordList}
         keyExtractor = {(letters, idx) => (letters + idx)}
         data         = {data.bee_list.bees.filter((bb) => filter_re.test(bb.letters))}
-        onEndReached = {fetcher(data, fetchMore)}
+        onEndReached = {fetcher(data, fetchMore, refreshing, setRefreshing)}
+        onEndReachedThreshold = {1.2}
         renderItem   = {({ item }) => <BeeListItem item={item} navigation={navigation} />}
       />
     </View>
@@ -48,7 +51,7 @@ const renderError = (error) => {
   )
 }
 
-const BeeListItem = ({ item, navigation }) => {
+const BeeListItem = React.memo(({ item, navigation }) => {
   const bee = Bee.from(item)
 
   const [beeDelMu] = useMutation(Ops.bee_del_mu, {
@@ -72,8 +75,11 @@ const BeeListItem = ({ item, navigation }) => {
       `Delete '${bee.letters}'?`,
       '',
       [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => beeDelMu({ variables: { letters: bee.letters } }) },
+        { text: 'Cancel',
+          style: 'cancel' },
+        { text: 'Delete',
+          style: 'destructive',
+          onPress: () => beeDelMu({ variables: { letters: bee.letters } }) },
       ],
     )
   }
@@ -89,26 +95,35 @@ const BeeListItem = ({ item, navigation }) => {
       rightIcon      = {{ name: 'cancel', onPress: beeDelPlz, color: '#222' }}
     />
   )
-}
+})
 
 const navToBee = (bee, event, navigation) => {
   navigation.navigate("Bee", { title: bee.letters, letters: bee.letters })
 }
 
-const fetcher = (data, fetchMore) => (() => {
+const fetcher = (data, fetchMore, refreshing, setRefreshing) => (() => {
   if (! data.bee_list.cursor) { return }
+  if (refreshing)             {
+    // console.log('skipping fetchMore', data.bee_list.cursor);
+    return
+  }
+  if (! fetchMore)            { return }
+  setRefreshing(true)
+  setTimeout(() => { setRefreshing(false) }, 3000)
+  // console.log(`starting fetchMore ${data.bee_list.cursor}`, refreshing)
   fetchMore({
     variables: {
       cursor: data.bee_list.cursor,
     },
     updateQuery: (prev, { fetchMoreResult, ..._rest }) => {
-      // console.log('uq', 'prev', prev, 'more', fetchMoreResult, 'rest', _rest)
+      // console.log(`update for fetchMore ${data.bee_list.cursor}`, refreshing)
       if (! fetchMoreResult) return prev
       let new_bees = [
         ...prev.bee_list.bees,
         ...fetchMoreResult.bee_list.bees,
       ]
-      new_bees = _.sortedUniq(_.sortBy(new_bees, 'letters'))
+      new_bees = _.sortedUniqBy(_.sortBy(new_bees, 'letters'), 'letters')
+      // console.log(new_bees.map((bb) => bb.letters))
       const ret = ({
         ...fetchMoreResult,
         bee_list: {
@@ -119,6 +134,9 @@ const fetcher = (data, fetchMore) => (() => {
       // console.log(ret)
       return ret
     },
+  }).finally(() => {
+    // console.log(`done fetchMore ${data.bee_list.cursor}`, refreshing)
+    setRefreshing(false)
   })
 })
 
