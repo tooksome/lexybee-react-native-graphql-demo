@@ -1,8 +1,8 @@
-import * as React                 from 'react'
+import React                    from 'react'
 import { StyleSheet, Text, View,
-}                                 from 'react-native'
+}                               from 'react-native'
 //
-import WebLink                    from '../components/WebLink'
+import WebLink                  from '../components/WebLink'
 
 const AboutScreen = () => (
   <View style={[styles.container]}>

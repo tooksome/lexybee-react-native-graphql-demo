@@ -1,6 +1,6 @@
-import _                from 'lodash'
-import Guess            from './Guess'
-import { Dicts }        from './Dicts'
+import _                        from 'lodash'
+import Guess                    from './Guess'
+import { Dicts }                from './Dicts'
 
 const VOWELS = new Set(['a', 'e', 'i', 'o', 'u'])
 

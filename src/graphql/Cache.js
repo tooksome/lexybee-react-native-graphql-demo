@@ -1,5 +1,5 @@
 import { InMemoryCache,
-}                       from '@apollo/client'
+}                               from '@apollo/client'
 
 const Cache = new InMemoryCache({
   typePolicies: {

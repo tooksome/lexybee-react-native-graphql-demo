@@ -1,7 +1,7 @@
-import gql             from 'graphql-tag'
-// import { ApolloCache } from '@apollo/cache'
-// import { Resolvers }   from '@apollo/client'
-// import   Ops           from './Ops'
+import gql                      from 'graphql-tag'
+// import { ApolloCache }       from '@apollo/cache'
+// import { Resolvers }         from '@apollo/client'
+// import   Ops                 from './Ops'
 
 export const typeDefs = gql`
   extend type Query {

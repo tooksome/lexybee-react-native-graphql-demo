@@ -1,8 +1,7 @@
-import * as React               from 'react'
+import React                    from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { StyleSheet           } from 'react-native'
-import { Button, Icon,
-}                               from 'react-native-elements'
+import { StyleSheet }           from 'react-native'
+import { Button, Icon }         from 'react-native-elements'
 //
 import BeeListScreen            from '../screens/BeeListScreen'
 import BeeScreen                from '../screens/BeeScreen'

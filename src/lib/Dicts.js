@@ -1,7 +1,7 @@
-import _              from 'lodash'
-import ScrabbleWords  from '../../data/wl_us.json'
-import NytWords       from '../../data/dict_nyt.json'
-import ObsWords       from '../../data/dict_obs.json'
+import _                        from 'lodash'
+import ScrabbleWords            from '../../data/wl_us.json'
+import NytWords                 from '../../data/dict_nyt.json'
+import ObsWords                 from '../../data/dict_obs.json'
 
 const Dicts = {
   scr: new Set(ScrabbleWords),

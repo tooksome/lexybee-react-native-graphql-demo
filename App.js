@@ -1,20 +1,18 @@
-import * as React              from 'react'
-import { YellowBox,
-}                              from 'react-native'
-import { SplashScreen }        from 'expo'
-import * as Font               from 'expo-font'
-import { Ionicons }            from '@expo/vector-icons'
-import { NavigationContainer } from '@react-navigation/native'
-import {
-  ApolloProvider, ApolloClient, HttpLink,
-}                              from '@apollo/client'
+import React                    from 'react'
+import { YellowBox }            from 'react-native'
+import { SplashScreen }         from 'expo'
+import * as Font                from 'expo-font'
+import { Ionicons }             from '@expo/vector-icons'
+import { NavigationContainer }  from '@react-navigation/native'
+import { ApolloProvider, ApolloClient, HttpLink,
+}                               from '@apollo/client'
 //
-import AppNavigator            from './src/navigation/AppNavigator'
-import useLinking              from './src/navigation/useLinking'
-import { typeDefs, resolvers } from './src/graphql/resolvers'
-import Cache                   from './src/graphql/Cache'
-import Secrets                 from './Secrets'
-import { AppWrapper }          from './src/components/AppWrapper'
+import AppNavigator             from './src/navigation/AppNavigator'
+import useLinking               from './src/navigation/useLinking'
+import { typeDefs, resolvers }  from './src/graphql/resolvers'
+import Cache                    from './src/graphql/Cache'
+import Secrets                  from './Secrets'
+import { AppWrapper }           from './src/components/AppWrapper'
 
 // Don't yell at me about other modules' error messages
 YellowBox.ignoreWarnings(['RootErrorBoundary'])

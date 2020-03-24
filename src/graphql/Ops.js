@@ -1,4 +1,4 @@
-import gql          from 'graphql-tag'
+import gql                      from 'graphql-tag'
 
 const Fragments = {
   bee_frag: gql`
@@ -22,7 +22,7 @@ const Ops = {
 
   bee_list_qy: gql`
   query bee_list_qy($cursor: String) {
-    bee_list(limit: 30, cursor: $cursor) {
+    bee_list(limit: 12, cursor: $cursor) {
       bees { ...bee_frag }
       cursor
     }

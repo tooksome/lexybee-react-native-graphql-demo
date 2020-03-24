@@ -1,16 +1,14 @@
 import React, { useState, useRef,
-}                          from 'react'
+}                               from 'react'
 import { StyleSheet, View, ActivityIndicator,
-}                          from 'react-native'
-import { Button, Input, Icon,
-}                          from 'react-native-elements'
-import { useMutation,
-}                          from '@apollo/client'
-import * as Yup            from 'yup'
-import { useNavigation }   from '@react-navigation/native'
+}                               from 'react-native'
+import { Button, Input, Icon }  from 'react-native-elements'
+import { useMutation }          from '@apollo/client'
+import * as Yup                 from 'yup'
+import { useNavigation }        from '@react-navigation/native'
 //
-import Bee                 from '../lib/Bee'
-import Ops                 from '../graphql/Ops'
+import Bee                      from '../lib/Bee'
+import Ops                      from '../graphql/Ops'
 
 const validator = Yup.object().shape({
   entry: Yup

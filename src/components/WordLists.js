@@ -1,11 +1,10 @@
-import React          from 'react'
+import React                    from 'react'
 import { StyleSheet, Text, View, FlatList, SectionList,
-}                     from 'react-native'
-import { Icon,
-}                     from 'react-native-elements'
+}                               from 'react-native'
+import { Icon }                 from 'react-native-elements'
 
 const validStyle = (guess) => {
-  if (! guess.valid)  return styles.entryBad
+  if (! guess.valid) return styles.entryBad
   if (guess.nogo)    return styles.nogo
   if (guess.isPan)   return styles.entryPangram
   if (guess.nyt)     return styles.entryValid
@@ -65,7 +64,6 @@ const NogosList = ({ nogos, delGuess }) => (
   />
 )
 
-
 const HintsList = ({ hints, reveal }) => (
   <FlatList
     ListHeaderComponent = {<Text style={styles.glHeader}>Hints ({reveal})</Text>}
@@ -75,7 +73,6 @@ const HintsList = ({ hints, reveal }) => (
     renderItem          = {(info) => guessItem({ showScore: false, reveal, ...info })}
   />
 )
-
 
 const WordLists = ({ guesses, nogos, hints, delGuess, wordListRef, reveal, showHints }) => (
   <View style={styles.wordListBox}>
@@ -87,7 +84,7 @@ const WordLists = ({ guesses, nogos, hints, delGuess, wordListRef, reveal, showH
   </View>
 )
 
-//
+export default WordLists
 
 const styles = StyleSheet.create({
   wordListBox: {
@@ -172,5 +169,3 @@ const styles = StyleSheet.create({
     color: "#c8c8c8",
   },
 })
-
-export default WordLists

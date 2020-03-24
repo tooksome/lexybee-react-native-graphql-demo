@@ -1,25 +1,14 @@
-import * as React              from 'react'
+import React                    from 'react'
 import { Platform, StatusBar, StyleSheet, SafeAreaView,
-}                              from 'react-native'
+}                               from 'react-native'
 import { DefaultTheme, DarkTheme,
-}                              from '@react-navigation/native'
+}                               from '@react-navigation/native'
 import { ThemeProvider, colors,
-}                              from 'react-native-elements'
+}                               from 'react-native-elements'
 import { Appearance, AppearanceProvider, useColorScheme,
-}                              from 'react-native-appearance'
+}                               from 'react-native-appearance'
 
 Appearance.getColorScheme()
-/* const colorSchemes = {
- *   light: {
- *     // background: '#eec',
- *     // text:       '333',
- *   },
- *   dark: {
- *     // background: '#333',
- *     // text:       '#fff',
- *   },
- * }
- *  */
 
 const baseTheme = {
   colors: {
@@ -68,7 +57,6 @@ const rneDarkTheme = {
 
 const AppWrapper = ({ children }) => {
   const colorScheme = useColorScheme()
-  // const rnColors = colorSchemes[colorScheme] || colorSchemes.light
   const navTheme = (colorScheme === 'dark' ? DarkTheme    : DefaultTheme)
   const theme    = (colorScheme === 'dark' ? rneDarkTheme : baseTheme)
   const barStyle = (colorScheme === 'dark' ? 'light-content' : 'dark-content')

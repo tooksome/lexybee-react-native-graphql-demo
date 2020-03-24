@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
-import { StyleSheet, View,
-}                          from 'react-native'
-import { Button, Input, Icon,
-}                          from 'react-native-elements'
-import { useMutation }     from '@apollo/client'
+import React, { useState }      from 'react'
+import { StyleSheet, View }     from 'react-native'
+import { Button, Input, Icon }  from 'react-native-elements'
+import { useMutation }          from '@apollo/client'
 //
-import Layout              from '../lib/Layout'
-import Ops                 from '../graphql/Ops'
+import Layout                   from '../lib/Layout'
+import Ops                      from '../graphql/Ops'
 
 const LetterButton = ({ letter, handler }) => (
   <Button
@@ -34,11 +32,15 @@ const GuessInput = ({ bee, onAdd }) => {
   const [beePutMu] = useMutation(Ops.bee_put_mu)
 
   const addGuess = () => {
-    if (bee.hasWord(entry)) { clearEntry(); onAdd({ guess: { word: entry, len: entry.length } }); return }
+    if (bee.hasWord(entry)) {
+      clearEntry()
+      onAdd({ guess: { word: entry, len: entry.length } })
+      return
+    }
     const guess = bee.addGuess(entry)
     beePutMu({
       variables: bee.serialize(),
-    }) // .then(() => onAdd({ guess }))
+    })
     onAdd({ guess })
     clearEntry()
   }
@@ -48,7 +50,7 @@ const GuessInput = ({ bee, onAdd }) => {
       <View style={styles.guessInputRow}>
         <View style={styles.guessInputFieldContainer}>
           <Input
-            style            = {[styles.entryText]}
+            style            = {styles.entryText}
             inputStyle       = {styles.entryText}
             autoCapitalize   = "none"
             autoCorrect      = {false}
@@ -60,12 +62,12 @@ const GuessInput = ({ bee, onAdd }) => {
           />
           <Icon
             name      = "backspace"
-            style     = {[styles.clearEntryTextButton]}
+            style     = {styles.clearEntryTextButton}
             onPress   = {delLetter}
           />
         </View>
         <Button
-          buttonStyle = {[styles.addEntryBtn]}
+          buttonStyle = {styles.addEntryBtn}
           onPress     = {addGuess}
           disabled    = {entry.length === 0}
           icon = {<Icon name="check" iconStyle={styles.entryIcon} />}

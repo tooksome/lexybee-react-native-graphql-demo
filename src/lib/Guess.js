@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import { Dicts } from './Dicts'
+import _                from 'lodash'
+import { Dicts }        from './Dicts'
 
 const Bowdlerizers = _.range(0, 15).map((len) => new RegExp(`^(.*?)(.{0,${len}})$`))
 
