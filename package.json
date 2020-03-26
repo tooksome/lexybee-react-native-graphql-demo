@@ -1,5 +1,6 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "version": "1.0.0",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -7,6 +8,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint App.js src/",
+    "release": "standard-version --release-as patch",
     "test": "jest --watchAll"
   },
   "jest": {
@@ -61,7 +63,9 @@
     "glob": "^7.1.6",
     "jest-expo": "~36.0.1",
     "jssoup": "^0.0.10",
-    "react-native-debugger-open": "^0.3.24"
+    "react-native-debugger-open": "^0.3.24",
+    "standard-version": "^7.1.0",
+    "standard-version-expo": "^1.0.1"
   },
   "private": true
 }
