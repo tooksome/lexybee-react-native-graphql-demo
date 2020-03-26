@@ -2,6 +2,8 @@
 // Docs Here:
 //    https://github.com/conventional-changelog/conventional-changelog-config-spec/blob/master/versions/2.1.0/README.md
 
+// Accidentally tag? run `git tag -d vX.X.X` to remove
+
 const StandardVersionConfig = {
   skip: {
     tag:    false,
@@ -22,6 +24,9 @@ const StandardVersionConfig = {
     {
       filename: 'app.json',
       updater: require.resolve('standard-version-expo/ios'),
+    },
+    { filename: 'src/screens/AboutScreen.js',
+      updater:  require.resolve('./.versionrc-updateAboutScreen.js'),
     },
   ],
   types: [

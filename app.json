@@ -2,9 +2,10 @@
   "expo": {
     "name": "Lexy Bee",
     "slug": "lexybee",
+    "description": "Search words and definitions",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "version": "1.0.0",
+    "version": "0.1.1",
     "platforms": [
       "ios",
       "android",
@@ -13,6 +14,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/LexyIcon.png",
     "scheme": "lexy",
+    "primaryColor": "#fbf3e0",
     "splash": {
       "image": "./assets/images/Splash.png",
       "resizeMode": "contain",
@@ -28,10 +30,15 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mrflip.lexybee",
-      "buildNumber": "0.0.1",
+      "buildNumber": "0.1.1",
       "requireFullScreen": false
     },
-    "primaryColor": "#fbf3e0",
-    "description": "Search words and definitions"
+    "android": {
+      "package": "com.tooksome.peregrin",
+      "versionCode": 360000101,
+      "permissions": [
+        "CAMERA"
+      ]
+    }
   }
 }
