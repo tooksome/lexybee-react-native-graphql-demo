@@ -21,18 +21,23 @@ const BeeListScreen = ({ navigation }) => {
   if (! data)             return <Text>No Data</Text>
   const filter_re = Bee.makePangramRe(filter)
 
+  const renderItem   = ({ item }) => (<BeeListItem item={item} navigation={navigation} />)
+  const keyExtractor = (bee, _idx) => (bee.letters)
+  const beeData      = data.bee_list.bees.filter((bb) => filter_re.test(bb.letters))
+
   return (
     <View style={styles.container}>
       <NewBee
         onChangeLtrs = {(text) => setFilter(text.toUpperCase())}
       />
       <FlatList
-        style        = {styles.beeList}
-        keyExtractor = {(letters, idx) => (letters + idx)}
-        data         = {data.bee_list.bees.filter((bb) => filter_re.test(bb.letters))}
-        onEndReached = {moreBees(data, fetchMore, refreshing, setRefreshing)}
+        style         = {styles.beeList}
+        keyExtractor  = {keyExtractor}
+        data          = {beeData}
+        onEndReached  = {moreBees(data, fetchMore, refreshing, setRefreshing)}
+        getItemLayout = {BeeListItem.getItemLayout}
+        renderItem    = {renderItem}
         onEndReachedThreshold = {1.2}
-        renderItem   = {({ item }) => <BeeListItem item={item} navigation={navigation} />}
       />
     </View>
   )

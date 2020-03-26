@@ -63,7 +63,6 @@ const NewBee = ({ onChangeLtrs }) => {
     setEntry(normText)
   }
 
-  // (!validationSchema.isValidSync({ entry }))
   return (
     <View style={styles.container}>
       <Input

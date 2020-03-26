@@ -1,7 +1,8 @@
-import React                    from 'react'
+import React               /**/ from 'react'
 import _                        from 'lodash'
-import { StyleSheet, Alert }    from 'react-native'
-import { ListItem }             from 'react-native-elements'
+import { StyleSheet, Alert, View, Text, TouchableOpacity,
+}                               from 'react-native'
+import { Icon }                 from 'react-native-elements'
 import { useMutation }          from '@apollo/client'
 //
 import Bee                      from '../lib/Bee'
@@ -13,9 +14,7 @@ const navToBee = (bee, event, navigation) => {
   navigation.navigate("Bee", { title: bee.letters, letters: bee.letters })
 }
 
-const BeeListItem = React.memo(({ item, navigation }) => {
-  const bee = Bee.from(item)
-
+const BeeListItem = React.memo(({ item:bee, navigation }) => {
   const [beeDelMu] = useMutation(Ops.bee_del_mu, {
     update: beeDelUpdater,
   })
@@ -36,38 +35,48 @@ const BeeListItem = React.memo(({ item, navigation }) => {
   // AllBees.forEach((letters) => (beeDelMu({ variables: { letters } })))
 
   return (
-    <ListItem
-      title          = {bee.dispLtrs}
-      style          = {styles.listItemStyle}
-      titleStyle     = {styles.listTextStyle}
-      containerStyle = {styles.listItemContainerStyle}
-      onPress        = {(event) => navToBee(bee, event, navigation)}
-      rightIcon      = {{ name: 'cancel', onPress: beeDelPlz, color: '#222' }}
-    />
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={[styles.listRect]}
+        onPress        = {(event) => navToBee(bee, event, navigation)}
+      >
+        <Text style={styles.listText}>
+          {Bee.dispLtrs(bee.letters)}
+        </Text>
+        <Icon name="cancel" onPress={beeDelPlz} color="#aaa" />
+      </TouchableOpacity>
+
+    </View>
   )
 })
+
+// To find height, add this to the Wrapping TouchableOpacity above:
+//   onLayout={(event) => (console.log(event.nativeEvent.layout))}
+const LIST_ITEM_HEIGHT = 49 + 8 // height + padding
+BeeListItem.getItemLayout = (_d, index) => (
+  { length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index }
+)
 
 export default BeeListItem
 
 const styles = StyleSheet.create({
   container: {
     flex:                   1,
-    alignItems:             'center',
+    width: '100%',
   },
-  wordList: {
-    width:                  '100%',
-    marginTop:              4,
+  listText: {
+    fontSize:               24,
+    flex:                   10,
   },
-  listItemStyle: {
-    paddingHorizontal:      8,
-    paddingVertical:        4,
-    borderRadius:           8,
-  },
-  listTextStyle: {
-    fontSize: 24,
-  },
-  listItemContainerStyle: {
-    paddingVertical:        12,
+  listRect: {
+    flex:                   1,
+    flexDirection:          'row',
+    alignItems:             'stretch',
+    backgroundColor:        '#f0f0f0',
+    paddingHorizontal:      14,
+    paddingVertical:        10,
+    marginHorizontal:       8,
+    marginVertical:         4,
     borderRadius:           8,
     shadowColor:            '#222',
     shadowOffset:           { width: 0, height: 2 },

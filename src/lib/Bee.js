@@ -14,7 +14,8 @@ class Bee {
     this.nogos       = []
     this._lexMatches = {}
     this._allWords   = null
-    this.hints   = this.getHints()
+    this.hints       = this.getHints()
+    this.dispLtrs    = Bee.dispLtrs(this.letters)
   }
 
   getHints() {
@@ -51,8 +52,8 @@ class Bee {
     return [firl, ...luniq].join('')
   }
 
-  get dispLtrs() {
-    const la = this.letters.toUpperCase().split('')
+  static dispLtrs(letters) {
+    const la = letters.toUpperCase().split('')
     return [la.shift(), '/', ...la].join(' ')
   }
 
