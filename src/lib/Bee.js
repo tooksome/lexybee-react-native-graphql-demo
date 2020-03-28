@@ -11,8 +11,12 @@ class Bee {
     this.pangramRe   = Bee.makePangramRe(this.letters)
     this.rejectRe    = Bee.makeRejectRe(this.letters)
     //
-    this.guesses = obj.guesses?.map((gg) => new Guess(gg, this)) ?? []
-    this.nogos   = obj.nogos?.map((gg)   => new Guess(gg, this)) ?? []
+    this.guesses = (obj.guesses)
+      ? obj.guesses.map((gg) => new Guess(gg, this))
+      : []
+    this.nogos   = (obj.nogos)
+      ? obj.nogos.map((gg)   => new Guess(gg, this))
+      : []
     this._lexMatches = {}
     this._allWords   = null
     this.hints       = this.getHints()
