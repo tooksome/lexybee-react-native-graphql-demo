@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/tooksome/lexybee-react-native-graphql-demo/compare/v1.0.2...v1.0.3) (2020-03-28)
+
+
+### Bug Fixes
+
+* Buttons size correctly ([f6728fb](https://github.com/tooksome/lexybee-react-native-graphql-demo/commit/f6728fb1e9b798280d55e5cb50cea2604f32f9dd))
+
 ### [1.0.2](https://github.com/tooksome/lexybee-react-native-graphql-demo/compare/v1.0.1...v1.0.2) (2020-03-28)
 
 
