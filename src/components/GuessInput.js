@@ -12,6 +12,7 @@ const LetterButton = ({ letter, handler }) => (
     onPress     = {() => handler(letter)}
     buttonStyle = {styles.letterButton}
     titleStyle  = {styles.letterButtonText}
+    containerStyle = {styles.letterButtonCtnr}
   />
 )
 
@@ -139,11 +140,13 @@ const styles = StyleSheet.create({
   letterButton: {
     padding:           3,
     margin:            5,
-    width:             btnWidth,
     backgroundColor:   '#eef',
     borderWidth:       2,
     borderColor:       '#99b',
     borderStyle:       'solid',
+  },
+  letterButtonCtnr: {
+    flex:              1,
   },
   letterButtonText: {
     fontSize:          (btnWidth <= 32 ? 24 : 34),
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection:     'row',
     justifyContent:    'space-around',
-    width:             '94%',
+    marginHorizontal:   10,
     alignItems:        'center',
   },
 })

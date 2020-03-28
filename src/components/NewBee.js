@@ -75,13 +75,13 @@ const NewBee = ({ onChangeLtrs }) => {
         onChangeText     = {updateEntry}
         onSubmitEditing  = {addBeePlz}
         ref              = {lettersInput}
-        rightIcon = {
-              <Icon
-        name      = "clear"
-        style     = {styles.clearEntryTextButton}
-        onPress   = {() => updateEntry('')}
-        />
-        }
+        rightIcon = {(
+          <Icon
+            name      = "clear"
+            style     = {styles.clearEntryTextButton}
+            onPress   = {() => updateEntry('')}
+          />
+        )}
       />
 
       {(isSubmitting
