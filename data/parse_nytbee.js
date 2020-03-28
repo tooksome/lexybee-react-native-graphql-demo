@@ -1,4 +1,4 @@
-#!/usr/bin/env node -r esm
+#!/usr/bin/env node -r esm --harmony
 import fs       from 'fs'
 import JSSoup   from 'jssoup'
 import _        from 'lodash'
@@ -57,7 +57,7 @@ glob(`${data_dir}/Bee_*.html`, (err, files) => {
 
   const all_ltrs = AllBees.map((bb)=> [bb.letters.toUpperCase(), bb.datestr])
   all_ltrs.sort(([wa,da], [wb, db]) => (da < db ? 1 : -1))
-  
+
   fs.writeFileSync('./data/dict_nyt.json', JSON.stringify(all_wds), { encoding: 'utf8' });
   fs.writeFileSync('./data/dict_obs.json', JSON.stringify(all_obs), { encoding: 'utf8' });
   fs.writeFileSync('./data/bees.json',     JSON.stringify(all_ltrs), { encoding: 'utf8' });
