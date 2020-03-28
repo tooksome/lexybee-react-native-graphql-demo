@@ -28,7 +28,7 @@ const BeeScreenComp = ({ bee, reveal, showHints }) => {
     try {
       el.scrollToLocation({ ...sectionForGuess, animated: false })
     } catch (err) {
-      console.log(err) // eslint-disable-line
+      // console.log(err) // eslint-disable-line
     }
   }
 
@@ -62,7 +62,7 @@ const BeeScreen = ({ navigation, route }) => {
   const { letters }     = params
   const [reveal,    setReveal]    = useState(0)
   const [showHints, setShowHints] = useState(false)
-  const incReveal = ((inc) => setReveal(_.clamp(reveal + inc, 0, 15)))
+  const incReveal = React.useCallback((inc) => setReveal((rr) => (_.clamp(rr + inc, 0, 15))))
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -84,7 +84,6 @@ const BeeScreen = ({ navigation, route }) => {
   //
   const bee = Bee.from(data.bee_get.bee)
   navigation.setOptions({ title: bee.dispLtrs })
-
   //
   // console.log(bee.serialize().guesses)
   return (
@@ -95,7 +94,7 @@ const BeeScreen = ({ navigation, route }) => {
 }
 
 const renderError = ({ error, navigation }) => {
-  console.log("Error in ListBees", JSON.stringify(error)) // eslint-disable-line
+  console.error(error) // eslint-disable-line
   return (
     <View style={styles.container}>
       <View>

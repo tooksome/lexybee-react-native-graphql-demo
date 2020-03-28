@@ -60,7 +60,24 @@ Things that were hard to figure out:
   - Use `getItemLayout`; to find the height of the element, add this to the wrapping element:
       `onLayout={(event) => (console.log(event.nativeEvent.layout))}`
 * `esm` lets you use modern Javascript everywhere, without require vs module conflicts.
+* Use the functional form of setState -- `setFoo((foo) => (foo + letter))` -- if the new state depends on the old state. `setFoo(foo+letter)` is a race condition.
 
+
+## Links
+
+* [RN Layout Cheat Sheet](https://medium.com/wix-engineering/the-full-react-native-layout-cheat-sheet-a4147802405c)
+* [Apollo GraphQL Docs](https://www.apollographql.com/docs/react/v3.0-beta/data/queries/)
+* [Expo Docs](https://docs.expo.io/versions/v36.0.0/sdk/overview/)
+* [React Native Docs](https://reactnative.dev/docs/textinput)
+* [React Navigation Docs](https://reactnavigation.org/docs/tab-based-navigation)
+* [Material Icons Catalog](https://material.io/resources/icons/?icon=visibility_off&style=baseline)
+* [Lodash Docs](https://lodash.com/docs/4.17.15#assign)
+* [Javascript Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)
+* Local server frontends (only work once you've started the servers locally)
+  - [Local DynamoDB shell](http://localhost:8000/shell/)
+  - [Local GraphQL playground](http://localhost:4000/graphql) (
+  - [Expo Dev Tools](http://localhost:19002/)
+  - [Expo Web View](http://localhost:19006/Inventory/Inventory)
 
 ## TODO
 

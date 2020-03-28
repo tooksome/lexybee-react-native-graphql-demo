@@ -12,8 +12,7 @@ const validStyle = (guess) => {
   return styles.entryOther
 }
 
-const guessItem = ({ item, showScore = true, delGuess, reveal = null }) => {
-  const guess = item
+const guessItem = ({ item:guess, showScore = true, delGuess, reveal = null }) => {
   const vStyle = validStyle(guess)
   return (
     <View style={[styles.guessBox, vStyle]}>
@@ -79,7 +78,7 @@ const WordLists = ({ guesses, nogos, hints, delGuess, wordListRef, reveal, showH
     <GuessList guesses={guesses}  delGuess={delGuess} wordListRef={wordListRef} />
     {(showHints
       ? (<HintsList hints={hints} reveal={reveal} />)
-      : (<NogosList nogos={nogos}     delGuess={delGuess} />)
+      : (<NogosList nogos={nogos} delGuess={delGuess} />)
     )}
   </View>
 )

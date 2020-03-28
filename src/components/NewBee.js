@@ -75,7 +75,15 @@ const NewBee = ({ onChangeLtrs }) => {
         onChangeText     = {updateEntry}
         onSubmitEditing  = {addBeePlz}
         ref              = {lettersInput}
+        rightIcon = {
+              <Icon
+        name      = "clear"
+        style     = {styles.clearEntryTextButton}
+        onPress   = {() => updateEntry('')}
+        />
+        }
       />
+
       {(isSubmitting
         ? (<ActivityIndicator />)
         : (
@@ -108,6 +116,9 @@ const styles = StyleSheet.create({
   newBeeBtn: {
     flex:             10,
     borderRadius:     8,
+  },
+  clearEntryTextButton: {
+    padding:           5,
   },
 })
 

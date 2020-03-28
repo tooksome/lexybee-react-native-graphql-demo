@@ -14,7 +14,7 @@ const navToBee = (bee, event, navigation) => {
   navigation.navigate("Bee", { title: bee.letters, letters: bee.letters })
 }
 
-const BeeListItem = React.memo(({ item:bee, navigation }) => {
+const BeeListItem = ({ item:bee, navigation }) => {
   const [beeDelMu] = useMutation(Ops.bee_del_mu, {
     update: beeDelUpdater,
   })
@@ -48,7 +48,7 @@ const BeeListItem = React.memo(({ item:bee, navigation }) => {
 
     </View>
   )
-})
+}
 
 // To find height, add this to the Wrapping TouchableOpacity above:
 //   onLayout={(event) => (console.log(event.nativeEvent.layout))}
@@ -57,7 +57,7 @@ BeeListItem.getItemLayout = (_d, index) => (
   { length: LIST_ITEM_HEIGHT, offset: LIST_ITEM_HEIGHT * index, index }
 )
 
-export default BeeListItem
+export default React.memo(BeeListItem)
 
 const styles = StyleSheet.create({
   container: {

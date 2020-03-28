@@ -5,13 +5,14 @@ import { Dicts }                from './Dicts'
 const VOWELS = new Set(['a', 'e', 'i', 'o', 'u'])
 
 class Bee {
-  constructor(ltrs) {
+  constructor(ltrs, obj = {}) {
     this.letters     = Bee.normalize(ltrs)
     this.mainLetter  = this.letters[0]  //eslint-disable-line
     this.pangramRe   = Bee.makePangramRe(this.letters)
     this.rejectRe    = Bee.makeRejectRe(this.letters)
-    this.guesses     = []
-    this.nogos       = []
+    //
+    this.guesses = obj.guesses?.map((gg) => new Guess(gg, this)) ?? []
+    this.nogos   = obj.nogos?.map((gg)   => new Guess(gg, this)) ?? []
     this._lexMatches = {}
     this._allWords   = null
     this.hints       = this.getHints()
@@ -19,25 +20,25 @@ class Bee {
   }
 
   getHints() {
-    return (this
+    this.hints = (this
       .allWords
       .filter((wd) => (wd.length >= 4))
       .filter((wd) => (! this.hasWord(wd)))
       .map((wd) => new Guess(wd.toLowerCase(), this))
     )
+    return this.hints
   }
 
   get allWords() {
     if (! this._allWords) {
-      const nyt = this.lexMatches('nyt')
-      const scr = this.lexMatches('scr')
-      this._allWords   = _.sortedUniq(
+      const nyt      = this.lexMatches('nyt')
+      const scr      = this.lexMatches('scr')
+      this._allWords = _.sortedUniq(
         _.sortBy(scr.words.concat(nyt.words), ['length', _.identity]),
       )
     }
     return this._allWords
   }
-
 
   static normalize(ltrs) {
     const lonly = ltrs.replace(/[^A-Za-z]/g, '')
@@ -70,7 +71,7 @@ class Bee {
   }
 
   static makeRejectRe(letters) {
-    return new RegExp(`[^${letters}]`, 'g')
+    return new RegExp(`[^${letters}]`, 'gi')
   }
 
   hasWord = (word) => (
@@ -92,7 +93,7 @@ class Bee {
       this.nogos.sort(Bee.byAlpha)
     } else {
       this.guesses   = this.guesses.concat(guess)
-      this.hints = this.getHints()
+      this.hints     = this.hints.filter((hh) => hh.word !== wd)
       this.guesses.sort(Bee.byAlpha)
     }
     return guess
@@ -101,7 +102,7 @@ class Bee {
   delGuess(wd) {
     this.guesses   = this.guesses.filter((guess) => guess.word !== wd)
     this.nogos     = this.nogos.filter((guess)   => guess.word !== wd)
-    this.hints = this.getHints()
+    this.hints     = this.getHints()
   }
 
   static byAlpha(aa, bb) {
@@ -126,7 +127,7 @@ class Bee {
 
   lexMatches = (lex) => {
     if (! this._lexMatches[lex]) {
-      this._lexMatches[lex] = Dicts.lexMatches(lex, this.letters.toLowerCase())
+      this._lexMatches[lex] = Dicts.lexMatches(lex, this.letters)
     }
     return this._lexMatches[lex]
   }
@@ -172,7 +173,7 @@ class Bee {
 
   serialize() {
     return {
-      letters: this.letters,
+      letters: this.letters.toUpperCase(),
       datestr: this.datestr,
       guesses: this.guesses.map((gg) => gg.word),
       nogos:   this.nogos.map((gg) => gg.word),
@@ -180,11 +181,7 @@ class Bee {
   }
 
   static from(obj) {
-    const bee   =  Object.assign(new Bee(obj.letters), obj)
-    bee.guesses = bee.guesses.map((gg) => new Guess(gg, bee))
-    bee.nogos   = bee.nogos.map((gg)   => new Guess(gg, bee))
-    bee.hints   = bee.getHints()
-    return bee
+    return new Bee(obj.letters, obj)
   }
 
 }

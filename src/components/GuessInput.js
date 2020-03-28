@@ -8,7 +8,7 @@ import Ops                      from '../graphql/Ops'
 
 const LetterButton = ({ letter, handler }) => (
   <Button
-    title       = {letter}
+    title       = {letter.toUpperCase()}
     onPress     = {() => handler(letter)}
     buttonStyle = {styles.letterButton}
     titleStyle  = {styles.letterButtonText}
@@ -26,8 +26,8 @@ const LetterButton = ({ letter, handler }) => (
 const GuessInput = ({ bee, onAdd }) => {
   const [entry, setEntry] = useState('')
 
-  const addLetter  = (letter) => setEntry(entry + letter)
-  const delLetter  = ()       => setEntry(entry.substring(0, entry.length - 1))
+  const addLetter  = (letter) => setEntry((ee) => (ee + letter.toLowerCase()))
+  const delLetter  = ()       => setEntry((ee) => (ee.substring(0, entry.length - 1)))
   const clearEntry = ()       => setEntry('')
   const [beePutMu] = useMutation(Ops.bee_put_mu)
 
@@ -41,6 +41,8 @@ const GuessInput = ({ bee, onAdd }) => {
     beePutMu({
       variables: bee.serialize(),
     })
+    // .then((...aa) => console.log('put bee', JSON.stringify(aa), bee.guesses))
+    // .catch((err)  => console.log('put err', err)) // eslint-disable-line
     onAdd({ guess })
     clearEntry()
   }
