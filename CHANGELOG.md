@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/tooksome/lexybee-react-native-graphql-demo/compare/v1.0.1...v1.0.2) (2020-03-28)
+
+
+### Bug Fixes
+
+* use functional form of state setters. Cleaned up a little of the over-generation of arrays ([820b339](https://github.com/tooksome/lexybee-react-native-graphql-demo/commit/820b339e886bfe7d581a349967bd85bb80526806))
+
+
+* Typed up more lessons learned ([7c89804](https://github.com/tooksome/lexybee-react-native-graphql-demo/commit/7c898044537913bd3e47a57c6e329c439b79cc80))
+
 ### 1.0.1 (2020-03-26)
 
 
