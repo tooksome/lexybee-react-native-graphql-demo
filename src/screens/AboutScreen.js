@@ -16,7 +16,7 @@ const AboutScreen = () => (
       Team
     </Text>
     <Text style={styles.aboutText}>
-      Lexy-Bee Version: 1.0.3
+      Lexy-Bee Version: 1.0.4
     </Text>
   </View>
 )
