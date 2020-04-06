@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/mrflip/lexy-bee/compare/v1.0.4...v1.0.5) (2020-04-06)
+
+
+### Features
+
+* more, better data; fix: wrong key letter selection ([daa7ffa](https://github.com/mrflip/lexy-bee/commit/daa7ffa3e2e48d3cfbe77c0a7ac0c78a6cf4eb3c))
+
+
+### Bug Fixes
+
+* graphql fixes; feat: sorting, datestrs ([6114263](https://github.com/mrflip/lexy-bee/commit/6114263ba794e75f2880b9db4c0e27640b678b66))
+
 ### [1.0.4](https://github.com/tooksome/lexybee-react-native-graphql-demo/compare/v1.0.3...v1.0.4) (2020-03-28)
 
 ### [1.0.3](https://github.com/tooksome/lexybee-react-native-graphql-demo/compare/v1.0.2...v1.0.3) (2020-03-28)
