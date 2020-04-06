@@ -43,6 +43,9 @@ const BeeListItem = ({ item:bee, navigation }) => {
         <Text style={styles.listText}>
           {Bee.dispLtrs(bee.letters)}
         </Text>
+        <Text style={styles.datestrText}>
+          {bee.datestr}
+        </Text>
         <Icon name="cancel" onPress={beeDelPlz} color="#aaa" />
       </TouchableOpacity>
 
@@ -61,26 +64,32 @@ export default React.memo(BeeListItem)
 
 const styles = StyleSheet.create({
   container: {
-    flex:                   1,
-    width: '100%',
+    flex:               1,
+    width:              '100%',
   },
   listText: {
-    fontSize:               24,
-    flex:                   10,
+    fontSize:           24,
+    flex:               12,
+  },
+  datestrText: {
+    fontSize:           16,
+    flex:               5,
+    paddingRight:       2,
+    color:              '#aaa',
   },
   listRect: {
-    flex:                   1,
-    flexDirection:          'row',
-    alignItems:             'stretch',
-    backgroundColor:        '#f0f0f0',
-    paddingHorizontal:      14,
-    paddingVertical:        10,
-    marginHorizontal:       8,
-    marginVertical:         4,
-    borderRadius:           8,
-    shadowColor:            '#222',
-    shadowOffset:           { width: 0, height: 2 },
-    shadowRadius:           2,
-    shadowOpacity:          0.12,
+    flex:               1,
+    flexDirection:      'row',
+    alignItems:         'center',
+    backgroundColor:    '#f0f0f0',
+    paddingHorizontal:  14,
+    paddingVertical:    10,
+    marginHorizontal:   8,
+    marginVertical:     4,
+    borderRadius:       8,
+    shadowColor:        '#222',
+    shadowOffset:       { width: 0, height: 2 },
+    shadowRadius:       2,
+    shadowOpacity:      0.12,
   },
 })

@@ -1,12 +1,15 @@
-import _                        from 'lodash'
-import Guess                    from './Guess'
-import { Dicts }                from './Dicts'
+import _           /**/ from 'lodash'
+import { sprintf }      from 'sprintf-js'
+import Guess            from './Guess'
+import { Dicts }        from './Dicts'
 
 const VOWELS = new Set(['a', 'e', 'i', 'o', 'u'])
 
 class Bee {
   constructor(ltrs, obj = {}) {
     this.letters     = Bee.normalize(ltrs)
+    this.datestr     = (obj.datestr || Bee.getDatestr())
+    //
     this.mainLetter  = this.letters[0]  //eslint-disable-line
     this.pangramRe   = Bee.makePangramRe(this.letters)
     this.rejectRe    = Bee.makeRejectRe(this.letters)
@@ -42,6 +45,11 @@ class Bee {
       )
     }
     return this._allWords
+  }
+
+  static getDatestr(date = _.now()) {
+    const dt = new Date(date)
+    return sprintf("%04d%02d%02d", dt.getFullYear(), 1 + dt.getMonth(), dt.getDate())
   }
 
   static normalize(ltrs) {

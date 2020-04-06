@@ -53,7 +53,7 @@ const NewBee = ({ onChangeLtrs }) => {
       return
     }
     setSubmitting(true)
-    beeAddMu({ variables: { letters: entry } })
+    beeAddMu({ variables: { letters: entry, datestr: Bee.getDatestr() } })
     updateEntry('')
   }
 

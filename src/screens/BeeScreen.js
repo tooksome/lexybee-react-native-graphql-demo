@@ -62,12 +62,18 @@ const BeeScreen = ({ navigation, route }) => {
   const { letters }     = params
   const [reveal,    setReveal]    = useState(0)
   const [showHints, setShowHints] = useState(false)
-  const incReveal = React.useCallback((inc) => setReveal((rr) => (_.clamp(rr + inc, 0, 15))))
+  const incReveal = React.useCallback(
+    (inc) => setReveal((rr) => (_.clamp(rr + inc, 0, 15))),
+  )
+  const toggleHints = () => {
+    setReveal(0)
+    setShowHints((showH) => (! showH))
+  }
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HintBar reveal={reveal} incReveal={incReveal} showHints={showHints} setShowHints={setShowHints} />
+        <HintBar reveal={reveal} incReveal={incReveal} showHints={showHints} toggleHints={toggleHints} />
       ),
     })
   }, [navigation, reveal, setReveal, showHints, setShowHints])

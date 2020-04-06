@@ -22,7 +22,7 @@ export const moreBees = (data, fetchMore, refreshing, setRefreshing) => (() => {
         ...prev.bee_list.bees,
         ...fetchMoreResult.bee_list.bees,
       ]
-      new_bees = _.sortedUniqBy(_.sortBy(new_bees, 'letters'), 'letters')
+      new_bees = _.uniqBy(new_bees, 'letters')
       // console.log(new_bees.map((bb) => bb.letters))
       const ret = ({
         ...fetchMoreResult,

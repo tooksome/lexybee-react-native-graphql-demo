@@ -4,7 +4,7 @@ import { StyleSheet, Text, View,
 }                               from 'react-native'
 import { Button, Icon }         from 'react-native-elements'
 
-const HintBar = ({ reveal, incReveal, showHints, setShowHints }) => (
+const HintBar = ({ reveal, incReveal, showHints, toggleHints }) => (
   <View style = {[styles.hintsHeader]}>
     {
       showHints
@@ -15,6 +15,7 @@ const HintBar = ({ reveal, incReveal, showHints, setShowHints }) => (
               onPress     = {() => incReveal(-1)}
               buttonStyle = {styles.mutedButton}
               titleStyle  = {styles.hintsHeaderText}
+              type = "outline"
             />
             <Text style   = {styles.hintsHeaderText}>({reveal})</Text>
             <Button
@@ -22,6 +23,7 @@ const HintBar = ({ reveal, incReveal, showHints, setShowHints }) => (
               onPress     = {() => incReveal(1)}
               buttonStyle = {styles.mutedButton}
               titleStyle  = {styles.hintsHeaderText}
+              type = "outline"
             />
           </View>
         )
@@ -29,7 +31,7 @@ const HintBar = ({ reveal, incReveal, showHints, setShowHints }) => (
     <Icon
       name        = {showHints ? 'visibility' : 'visibility-off'}
       iconStyle   = {styles.showHintsBtn}
-      onPress     = {() => setShowHints(! showHints)}
+      onPress     = {() => { toggleHints() }}
     />
   </View>
 )
@@ -46,14 +48,14 @@ const styles = StyleSheet.create({
   },
   hintsHeaderText: {
     color:              '#222',
-    fontSize:           18,
+    fontSize:           20,
   },
   mutedButton: {
     backgroundColor:    'transparent',
-    padding:            5,
+    paddingHorizontal:  10,
   },
   showHintsBtn: {
     fontSize:           30,
-    paddingHorizontal:  10,
+    marginHorizontal:  4,
   },
 })

@@ -3,7 +3,7 @@ import gql                      from 'graphql-tag'
 const Fragments = {
   bee_frag: gql`
     fragment bee_frag on Bee {
-      letters, guesses, nogos, __typename
+      letters, datestr, guesses, nogos, __typename
     }
   `,
 }
@@ -21,8 +21,10 @@ const Ops = {
   `,
 
   bee_list_qy: gql`
-  query bee_list_qy($cursor: String) {
-    bee_list(limit: 50, cursor: $cursor) {
+  query bee_list_qy($cursor: String, $sortby: String, $sortrev: Boolean = false) {
+    bee_list(limit: 50, cursor: $cursor, sortby: $sortby, sortrev: $sortrev) {
+      success
+      message
       bees { ...bee_frag }
       cursor
     }
@@ -31,9 +33,11 @@ const Ops = {
   `,
 
   bee_list_ids_qy: gql`
-  query bee_list_qy($cursor: String) {
-    bee_list(limit: 100, cursor: $cursor) {
-      bees { letters }
+  query bee_list_qy($cursor: String, $sortby: String, $sortrev: Boolean = false) {
+    bee_list(limit: 100, cursor: $cursor, sortby: $sortby, sortrev: $sortrev) {
+      success
+      message
+      bees { letters, datestr }
       cursor
     }
   }
