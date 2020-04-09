@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.6](https://github.com/mrflip/lexy-bee/compare/v1.0.5...v1.0.6) (2020-04-09)
+
+
+### Features
+
+* multi-sortable; fixed parsing bug with early bees; show updated at and scores ([824b389](https://github.com/mrflip/lexy-bee/commit/824b389a6da0e1dbd904a1d824543405abec71c8))
+* updated dictionary ([fa461f8](https://github.com/mrflip/lexy-bee/commit/fa461f8597e4b287354b17f5d97bbe93aa2e5c95))
+
 ### [1.0.5](https://github.com/mrflip/lexy-bee/compare/v1.0.4...v1.0.5) (2020-04-06)
 
 
