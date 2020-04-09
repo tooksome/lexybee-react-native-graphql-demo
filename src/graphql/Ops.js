@@ -3,7 +3,7 @@ import gql                      from 'graphql-tag'
 const Fragments = {
   bee_frag: gql`
     fragment bee_frag on Bee {
-      letters, datestr, guesses, nogos, __typename
+      letters, datestr, guesses, nogos, nytScore, nytMax, updatedAt, __typename
     }
   `,
 }
@@ -14,15 +14,22 @@ const Ops = {
     bee_get(letters: $letters) {
       success
       message
-      bee { ...bee_frag }
+      bee {
+        letters
+        datestr
+        guesses
+        nogos
+        nytScore
+        nytMax
+        updatedAt
+      }
     }
   }
-  ${Fragments.bee_frag}
   `,
 
   bee_list_qy: gql`
-  query bee_list_qy($cursor: String, $sortby: String, $sortrev: Boolean = false) {
-    bee_list(limit: 50, cursor: $cursor, sortby: $sortby, sortrev: $sortrev) {
+  query bee_list_qy($cursor: String, $sortby: String, $sortRev: Boolean = false) {
+    bee_list(limit: 50, cursor: $cursor, sortby: $sortby, sortRev: $sortRev) {
       success
       message
       bees { ...bee_frag }
@@ -33,20 +40,38 @@ const Ops = {
   `,
 
   bee_list_ids_qy: gql`
-  query bee_list_qy($cursor: String, $sortby: String, $sortrev: Boolean = false) {
-    bee_list(limit: 100, cursor: $cursor, sortby: $sortby, sortrev: $sortrev) {
+  query bee_list_qy($cursor: String, $sortby: String, $sortRev: Boolean = false) {
+    bee_list(limit: 100, cursor: $cursor, sortby: $sortby, sortRev: $sortRev) {
       success
       message
-      bees { letters, datestr }
+      bees {
+        letters
+        datestr
+        nytScore
+        nytMax
+        updatedAt
+      }
       cursor
     }
   }
   `,
 
   bee_put_mu: gql`
-  mutation bee_put_mu($letters: String!, $guesses: [String!], $nogos: [String!], $datestr: String) {
+  mutation bee_put_mu(
+    $letters:   String!
+    $guesses:   [String!]
+    $nogos:     [String!]
+    $datestr:   String
+    $nytScore:  Int
+    $nytMax:    Int
+  ) {
     bee_put(
-      letters: $letters, guesses: $guesses, nogos: $nogos, datestr: $datestr
+      letters:  $letters
+      guesses:  $guesses
+      nogos:    $nogos
+      datestr:  $datestr
+      nytScore: $nytScore
+      nytMax:   $nytMax
     ) {
       success
       message

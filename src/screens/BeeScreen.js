@@ -91,7 +91,7 @@ const BeeScreen = ({ navigation, route }) => {
   const bee = Bee.from(data.bee_get.bee)
   navigation.setOptions({ title: bee.dispLtrs })
   //
-  // console.log(bee.serialize().guesses)
+  // console.log(bee)
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={16} behavior="height">
       <BeeScreenComp bee={bee} reveal={reveal} showHints={showHints} />

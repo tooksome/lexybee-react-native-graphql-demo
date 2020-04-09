@@ -8,10 +8,10 @@ class Guess {
     this.word    = wd.toLowerCase()
     this.len     = this.word.length
     this.isPan   = bee.isPan(this.word)
-    this.scr     = Dicts.scr.has(this.word)
-    this.nyt     = Dicts.nyt.has(this.word)
-    this.valid   = (this.nyt || this.scr)
-    this.hasMain = this.word.includes(bee.mainLetter)
+    this.scr     = Dicts.isScr(this.word)
+    this.nyt     = Dicts.isNyt(this.word)
+    this.valid   = (this.scr || this.nyt)
+    this.hasMain = bee.hasMain(this.word)
     this.score   = this.getScore(this.word)
   }
 

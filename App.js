@@ -21,6 +21,7 @@ const apollo = new ApolloClient({
   cache: Cache,
   link: new HttpLink({
     uri: Secrets.graphql_api,
+    //uri: 'http://localhost:4000/graphql',
   }),
   typeDefs,
   resolvers,

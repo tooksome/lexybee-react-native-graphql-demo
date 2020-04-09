@@ -5,6 +5,7 @@ import { useMutation }          from '@apollo/client'
 //
 import Layout                   from '../lib/Layout'
 import Ops                      from '../graphql/Ops'
+import Bee                      from '../lib/Bee'
 
 const LetterButton = ({ letter, handler }) => (
   <Button
@@ -39,8 +40,12 @@ const GuessInput = ({ bee, onAdd }) => {
       return
     }
     const guess = bee.addGuess(entry)
+    // console.log(bee.serializeWithSummary())
     beePutMu({
-      variables: bee.serialize(),
+      variables: {
+        ...bee.serializeWithSummary(),
+        updatedAt: Bee.getDatestr(),
+      },
     })
     // .then((...aa) => console.log('put bee', JSON.stringify(aa), bee.guesses))
     // .catch((err)  => console.log('put err', err)) // eslint-disable-line

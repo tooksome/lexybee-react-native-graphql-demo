@@ -8,7 +8,8 @@ const VOWELS = new Set(['a', 'e', 'i', 'o', 'u'])
 class Bee {
   constructor(ltrs, obj = {}) {
     this.letters     = Bee.normalize(ltrs)
-    this.datestr     = (obj.datestr || Bee.getDatestr())
+    this.datestr     = (obj.datestr   || Bee.getDatestr())
+    this.updatedAt   = (obj.updatedAt || '')
     //
     this.mainLetter  = this.letters[0]  //eslint-disable-line
     this.pangramRe   = Bee.makePangramRe(this.letters)
@@ -24,27 +25,6 @@ class Bee {
     this._allWords   = null
     this.hints       = this.getHints()
     this.dispLtrs    = Bee.dispLtrs(this.letters)
-  }
-
-  getHints() {
-    this.hints = (this
-      .allWords
-      .filter((wd) => (wd.length >= 4))
-      .filter((wd) => (! this.hasWord(wd)))
-      .map((wd) => new Guess(wd.toLowerCase(), this))
-    )
-    return this.hints
-  }
-
-  get allWords() {
-    if (! this._allWords) {
-      const nyt      = this.lexMatches('nyt')
-      const scr      = this.lexMatches('scr')
-      this._allWords = _.sortedUniq(
-        _.sortBy(scr.words.concat(nyt.words), ['length', _.identity]),
-      )
-    }
-    return this._allWords
   }
 
   static getDatestr(date = _.now()) {
@@ -78,6 +58,23 @@ class Bee {
     return this.pangramRe.test(word)
   }
 
+  totScore() {
+    return this.guesses.reduce((tot, guess) => (tot + guess.score), 0)
+  }
+
+  panScore(wd) {
+    return (wd.length + (this.isPan(wd) ? 7 : 0))
+  }
+
+  hasWord = (word) => (
+    this.guesses.some((guess)  => (guess.word === word))
+    || this.nogos.some((guess) => (guess.word === word))
+  )
+
+  hasMain(wd) {
+    return wd.includes(this.mainLetter)
+  }
+
   static makePangramRe(letters) {
     return new RegExp(letters.split('').map((ltr) => `(?=.*${ltr})`).join(''), 'i')
   }
@@ -86,14 +83,30 @@ class Bee {
     return new RegExp(`[^${letters}]`, 'gi')
   }
 
-  hasWord = (word) => (
-    this.guesses.some((guess) => (guess.word === word))
-    || this.nogos.some((guess)  => (guess.word === word))
-  )
-
   normEntry = (text) => (
     text.toLowerCase().replace(this.rejectRe, '')
   )
+
+  getHints() {
+    this.hints = (this
+      .allWords
+      .filter((wd) => (wd.length >= 4))
+      .filter((wd) => (! this.hasWord(wd)))
+      .map((wd) => new Guess(wd.toLowerCase(), this))
+    )
+    return this.hints
+  }
+
+  get allWords() {
+    if (! this._allWords) {
+      const nyt      = this.lexMatches('nyt')
+      const scr      = this.lexMatches('scr')
+      this._allWords = _.sortedUniq(
+        _.sortBy(scr.words.concat(nyt.words), ['length', _.identity]),
+      )
+    }
+    return this._allWords
+  }
 
   addGuess(wd) {
     if (wd.length === 0) { return {} }
@@ -137,13 +150,6 @@ class Bee {
       .value()
   }
 
-  lexMatches = (lex) => {
-    if (! this._lexMatches[lex]) {
-      this._lexMatches[lex] = Dicts.lexMatches(lex, this.letters)
-    }
-    return this._lexMatches[lex]
-  }
-
   sectionForGuess = (guess) => {
     const gBS          = this.guessesByScore()
     const lens         = gBS.map((ll) => (ll.data[0].len))
@@ -155,7 +161,14 @@ class Bee {
     return ({ sectionIndex, itemIndex, viewPosition: 0.25 })
   }
 
-  summary(lex) {
+  lexMatches = (lex) => {
+    if (! this._lexMatches[lex]) {
+      this._lexMatches[lex] = Dicts.lexMatches(lex, this)
+    }
+    return this._lexMatches[lex]
+  }
+
+  summaryInfo(lex) {
     const { grouped, topScore, num } = this.lexMatches(lex)
     const [count, beeHist] = this.wordHist(lex)
     const totHist = Object
@@ -163,7 +176,13 @@ class Bee {
       .map(([kk, vv]) => [kk, vv.length])
       .map(([kk, vv]) => `${kk}:${beeHist[kk]}/${vv}`)
       .join(' ')
-    return `${this.totScore()}/${topScore} (${count}/${num}): ${totHist}`
+    const totScore = this.totScore()
+    return { totScore, topScore, count, num, totHist }
+  }
+
+  summary(lex) {
+    const { totScore, topScore, count, num, totHist } = this.summaryInfo(lex)
+    return `${totScore}/${topScore} (${count}/${num}): ${totHist}`
   }
 
   wordHist(lex) {
@@ -179,16 +198,26 @@ class Bee {
     return [count, hist]
   }
 
-  totScore() {
-    return this.guesses.reduce((tot, guess) => (tot + guess.score), 0)
-  }
-
   serialize() {
     return {
-      letters: this.letters.toUpperCase(),
-      datestr: this.datestr,
-      guesses: this.guesses.map((gg) => gg.word),
-      nogos:   this.nogos.map((gg) => gg.word),
+      letters:          this.letters.toUpperCase(),
+      datestr:          this.datestr,
+      guesses:          this.guesses.map((gg) => gg.word),
+      nogos:            this.nogos.map((gg) => gg.word),
+    }
+  }
+
+  serializeWithSummary() {
+    const nytSummary = this.summaryInfo('nyt')
+    const scrSummary = this.summaryInfo('scr')
+    const { totScore:nytScore, topScore:nytMax } = nytSummary
+    return {
+      ...this.serialize(),
+      nytScore,
+      nytMax,
+      nytFrac:          (Math.round(100 * (nytScore / nytMax)) || 0),
+      nytSummary:       JSON.stringify(nytSummary),
+      scrSummary:       JSON.stringify(scrSummary),
     }
   }
 

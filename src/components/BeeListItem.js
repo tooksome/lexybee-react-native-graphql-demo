@@ -43,8 +43,11 @@ const BeeListItem = ({ item:bee, navigation }) => {
         <Text style={styles.listText}>
           {Bee.dispLtrs(bee.letters)}
         </Text>
-        <Text style={styles.datestrText}>
-          {bee.datestr}
+        <Text style={[styles.quietText, styles.scoreText]}>
+          {`${bee.nytScore}\n${bee.nytMax}`}
+        </Text>
+        <Text style={[styles.quietText, styles.datestrText]}>
+          {`${bee.datestr}\n${bee.updatedAt}`}
         </Text>
         <Icon name="cancel" onPress={beeDelPlz} color="#aaa" />
       </TouchableOpacity>
@@ -71,11 +74,16 @@ const styles = StyleSheet.create({
     fontSize:           24,
     flex:               12,
   },
-  datestrText: {
-    fontSize:           16,
-    flex:               5,
-    paddingRight:       2,
+  quietText: {
+    fontSize:           15,
+    marginHorizontal:   4,
     color:              '#aaa',
+  },
+  datestrText: {
+    flex:               6,
+  },
+  scoreText: {
+    flex:               2,
   },
   listRect: {
     flex:               1,
