@@ -19,9 +19,9 @@ const AllBees  = []
 const VOWELS   = new Set('a', 'e', 'i', 'o', 'u')
 
 // For all of the files we downloaded,
-glob(`${data_dir}/Bee_*.html`, (err, files) => {
+glob(`${data_dir}/Bee*.html`, (err, files) => {
   files.forEach((filename) => {
-    console.log('Parsing', filename)
+    // console.log('Parsing', filename)
 
     // Read in the file as text
     const raw_html = fs.readFileSync(filename, 'utf8')
@@ -33,7 +33,7 @@ glob(`${data_dir}/Bee_*.html`, (err, files) => {
 
     // Find all the divs with class 'answer-list'
     // We only want the first and the thirds, so destructure them out
-    const [wds_els, _skip, obs_els] = doc
+    const [wds_els, obs_els_a, obs_els_b] = doc
       .findAll('div')
       .filter((div) => (
         (div.attrs.class === 'answer-list')
@@ -42,12 +42,21 @@ glob(`${data_dir}/Bee_*.html`, (err, files) => {
 
     // Within the div for words,
     words.wds     = wds_els
-      .text                             // Dump the HTML as text
-      .split(/\s+/)                     // Split on whitespace
+      .findAll('li')
+      .map((el) => (el.text))           // Dump the HTML as text
+      .map((str) => (str.replace(/\s/g, '')))           // strip whitespace
       .filter((ss) => (ss.length > 0))  // reject empty strings
+    // console.log(words.wds.filter((wd) => (wd.length > 11)))
+
+    // .split(/\s+/)                     // Split on whitespace
+
     // Within the div for rejected words,
-    if (obs_els) {
-      words.obs = obs_els               // go through its elements
+    if (obs_els_b) {
+      words.obs = obs_els_b             // go through its elements
+        .findAll('li')                  // to find all the <li> tags
+        .map((li) => li.text)           // And pull out the raw text from them
+    } else if (obs_els_a) {
+      words.obs = obs_els_a                 // go through its elements
         .findAll('li')                  // to find all the <li> tags
         .map((li) => li.text)           // And pull out the raw text from them
     } else {
@@ -59,17 +68,17 @@ glob(`${data_dir}/Bee_*.html`, (err, files) => {
 
     // The page is now parsed; rest of this is turning it into the object we want
 
+    // add to lexicons
+    words.wds.forEach((word) => AllWords.add(word))
+    words.obs.forEach((word) => AllObs.add(word))
+
     // Find main letter
     const ltr_hist = {}
     words.wds.forEach(
       (word) => _.uniq(word.split('')).forEach(
         (ltr) => (ltr_hist[ltr] = 1 + (ltr_hist[ltr]||0)))) // eslint-disable-line
 
-    // add to lexicons
-    words.wds.forEach((word) => AllWords.add(word))
-    words.obs.forEach((word) => AllObs.add(word))
-
-    words.letters = Object
+    const sorted_letters = Object
       .entries(ltr_hist)
       .sort(([wda, cta], [_b, ctb]) => {
         if (cta > ctb)          return -1
@@ -79,11 +88,10 @@ glob(`${data_dir}/Bee_*.html`, (err, files) => {
       })
       .map(([ll, _x]) => ll)
       .join('')
-    // console.log(words.letters)
-    // words.letters = words.letters
 
+    words.letters = Bee.normalize(sorted_letters)
 
-    words.letters = Bee.normalize(words.letters)
+    console.log('Parsed', filename, words.letters, words.wds.length, words.obs.length)
 
     AllBees.push(words)
   })
