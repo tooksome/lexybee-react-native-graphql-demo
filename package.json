@@ -65,7 +65,7 @@
     "jest-expo": "~36.0.1",
     "jssoup": "^0.0.10",
     "react-native-debugger-open": "^0.3.24",
-    "standard-version": "^7.1.0",
+    "standard-version": "^8.0.1",
     "standard-version-expo": "^1.0.1"
   },
   "private": true
